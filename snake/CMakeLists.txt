@@ -1,5 +1,5 @@
 set(SUBPROJECT_NAME snake)
-file(GLOB_RECURSE SOURCES "src/*.c")
+file(GLOB_RECURSE SOURCES "*.c")
 
 add_executable(${SUBPROJECT_NAME} ${SOURCES})
 target_link_libraries(${SUBPROJECT_NAME} PRIVATE SDL3::SDL3)

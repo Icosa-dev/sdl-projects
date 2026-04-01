@@ -90,8 +90,8 @@ int main(void)
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
     // Create window and renderer
-    SDL_Window *gWindow = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    SDL_Renderer *gRenderer = SDL_CreateRenderer(gWindow, NULL);
+    SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
     // Create snake
     Snake snake;
@@ -163,22 +163,22 @@ int main(void)
         }        
 
         // Clear renderer
-        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-        SDL_RenderClear(gRenderer);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
 
         // Render snake
-        SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         for (int i = 0; i < snake.size; i++)
         {
-            SDL_RenderFillRect(gRenderer, GetSegment(&snake, i));
+            SDL_RenderFillRect(renderer, GetSegment(&snake, i));
         }
 
         // Render apple
-        SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(gRenderer, &apple);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &apple);
 
         // Present rendered frame
-        SDL_RenderPresent(gRenderer);
+        SDL_RenderPresent(renderer);
         SDL_Delay(50);
     }
 
