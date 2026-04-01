@@ -12,5 +12,6 @@ cmake ..
 make
 
 # to run a program assuming you are in the build directory
-./<project-name>/<project-name>
+./<subproject-name>/<subproject-name>
+# for example "./snake/snake"
 ```
