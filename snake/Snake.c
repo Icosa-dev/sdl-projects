@@ -121,7 +121,7 @@ int main(void)
     // Create snake
     Snake snake;
     InitSnake(&snake);
-    PushBack(&snake, (SDL_FRect){WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, CELL_SIZE, CELL_SIZE});
+    PushBack(&snake, (SDL_FRect){(float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2, CELL_SIZE, CELL_SIZE});
 
     // Create apple
     SDL_FRect apple = (SDL_FRect){GetRandomX(), GetRandomY(), CELL_SIZE, CELL_SIZE};
@@ -136,7 +136,6 @@ int main(void)
         {
             if (event.type == SDL_EVENT_QUIT)
             {
-                SDL_Quit();
                 running = false;
             }
 
@@ -229,6 +228,10 @@ int main(void)
         SDL_RenderPresent(renderer);
         SDL_Delay(DELAY);
     }
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }

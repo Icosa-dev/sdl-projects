@@ -113,7 +113,6 @@ int main(void)
         {
             if (event.type == SDL_EVENT_QUIT)
             {
-                SDL_Quit();
                 running = false;
             }
         }
@@ -143,6 +142,10 @@ int main(void)
         generationCount++;
         SDL_RenderPresent(renderer);
     }
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }
