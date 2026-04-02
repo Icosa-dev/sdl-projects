@@ -12,6 +12,12 @@
 #include <string.h>
 #include <stdio.h>
 
+/*
+ * SortVisualizer.c
+ *
+ * A sorting algorithm visualizer. For more information run "sortvisualizer help"
+ */
+
 // Grid values
 #define CELL_SIZE 10
 #define ARRAY_SIZE 50

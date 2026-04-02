@@ -5,7 +5,9 @@
  */
 
 /*
- * snake.c - A basic snake game implemented in SDL3. Keybinds are WASD and can be
+ * Snake.c 
+ * 
+ * A basic snake game implemented in SDL3. Keybinds are WASD and can be
  * changed by updating the KEYBIND macros.
  */
 

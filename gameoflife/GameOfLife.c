@@ -10,6 +10,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+/*
+ * GameOfLife.c
+ *
+ * An implementation of Conway's Game of Life with SDL3 in C. The board
+ * is randomly generated each time and the generation count is printed to the console.
+ */
+
 // Grid values
 #define CELL_SIZE 1
 #define ROWS 500
