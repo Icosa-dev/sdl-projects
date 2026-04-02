@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
+ * snake.c - A basic snake game implemented in SDL3. Keybinds are WASD and can be
+ * changed by updating the KEYBIND macros.
+ */
+
 #include <SDL3/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,17 +29,17 @@
 
 // Snake deque can only be as large as the enitire grid
 #define SNAKE_MAX_SIZE (ROWS * COLUMNS)
-#define APPLES_MAX_SIZE 100
 
-// Keybinds
+// Keybinds. Default is WASD.
 #define KEYBIND_UP SDLK_W
 #define KEYBIND_DOWN SDLK_S
 #define KEYBIND_LEFT SDLK_A
 #define KEYBIND_RIGHT SDLK_D
 
-// Delay in ms
+// Delay in milliseconds
 #define DELAY 50
 
+// Direction enum for the snake's direction
 typedef enum
 {
     UP,
@@ -43,8 +48,7 @@ typedef enum
     RIGHT
 } Direction;
 
-// Snake is a static deque of SDL_FRects
-// it also contains the "direction" member
+// Snake is a static double-ended queue of SDL_FRects
 typedef struct
 {
     SDL_FRect elements[SNAKE_MAX_SIZE];
@@ -53,6 +57,7 @@ typedef struct
     Direction direction;
 } Snake;
 
+// Initialize the snake with values 0 and default direction UP
 void InitSnake(Snake *snake)
 {
     snake->head = 0;
@@ -60,6 +65,7 @@ void InitSnake(Snake *snake)
     snake->direction = UP;
 }
 
+// Push an SDL_FRect to the front of the snake deque
 void PushBack(Snake *snake, SDL_FRect rect)
 {
     if (snake->size >= SNAKE_MAX_SIZE)
@@ -71,18 +77,21 @@ void PushBack(Snake *snake, SDL_FRect rect)
         snake->size++;
 }
 
+// Remove the backmost element from the snake dequeue
 void PopBack(Snake *snake)
 {
     if (snake->size > 0)
         snake->size--;
 }
 
+// Get a segment from the snake deque relative to the head
 SDL_FRect *GetSegment(Snake *snake, int index)
 {
     int actualIndex = (snake->head + index) % SNAKE_MAX_SIZE;
     return &snake->elements[actualIndex];
 }
 
+// Generate random possition values for apple generation
 float GetRandomX()
 {
     return (float)(SDL_rand(COLUMNS) * CELL_SIZE);
@@ -93,6 +102,7 @@ float GetRandomY()
     return (float)(SDL_rand(ROWS) * CELL_SIZE);
 }
 
+// Freeze the screen when game over
 void GameOverScreen(SDL_Renderer *renderer)
 {
     SDL_Event event;
@@ -121,6 +131,7 @@ int main(void)
     // Create snake
     Snake snake;
     InitSnake(&snake);
+    // Push the first segment of the snake with possition in the middle of the window
     PushBack(&snake, (SDL_FRect){(float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2, CELL_SIZE, CELL_SIZE});
 
     // Create apple
@@ -229,6 +240,7 @@ int main(void)
         SDL_Delay(DELAY);
     }
 
+    // Free SDL resources
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

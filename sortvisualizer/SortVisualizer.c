@@ -5,34 +5,44 @@
  */
 
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_events.h>
 #include <SDL3/SDL_gamepad.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
 
+// Grid values
 #define CELL_SIZE 10
 #define ARRAY_SIZE 50
 #define COLUMNS ARRAY_SIZE
 #define ROWS ARRAY_SIZE
 
+// Window values
 #define TITLE "Sort Visualizer"
 #define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
 #define WINDOW_HEIGHT (ROWS * CELL_SIZE)
 
+// String comparison macro
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
+// Delay in milliseconds
 #define DELAY 50
 
+// Generate a random array to sort
 void GenerateRandomArray(int array[ARRAY_SIZE])
 {
     srand(time(NULL));
 
+    // Fill the array with sorted values. The array 
+    // that is generated will have 1 of each value
+    // from 1-50.
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
         array[i] = i + 1;
     }
 
+    // Shuffle the array
     for (int i = ARRAY_SIZE - 1; i > 0; i--)
     {
         int j = rand() % (i + 1);
@@ -42,6 +52,7 @@ void GenerateRandomArray(int array[ARRAY_SIZE])
     }
 }
 
+// Display the array as a bar graph on the screen
 void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -62,6 +73,14 @@ void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     SDL_RenderPresent(renderer);
 }
 
+// Check if the user quit
+void CheckEvent()
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+        if (event.type == SDL_EVENT_QUIT) { SDL_Quit(); exit(0); }
+}
+
 // Sorting algorithms
 void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
@@ -69,12 +88,13 @@ void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     {
         for (int j = 0; j < ARRAY_SIZE - i - 1; j++)
         {
+            CheckEvent();
             if (array[j] > array[j + 1])
             {
                 int temp = array[j];
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
-
+                
                 DisplayArray(renderer, array);
                 SDL_Delay(DELAY);
             }
@@ -89,6 +109,7 @@ void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
         int min_idx = i;
         for (int j = i + 1; j < ARRAY_SIZE; j++)
         {
+            CheckEvent();
             if (array[j] < array[min_idx])
             {
                 min_idx = j;
@@ -112,6 +133,8 @@ void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 
         while (j >= 0 && array[j] > key)
         {
+            CheckEvent();
+
             array[j + 1] = array[j];
             j = j - 1;
             
@@ -132,6 +155,8 @@ int Partition(SDL_Renderer *renderer, int array[], int low, int high)
 
     for (int j = low; j <= high - 1; j++)
     {
+        CheckEvent();
+
         if (array[j] < pivot)
         {
             i++;
@@ -162,6 +187,7 @@ void QuickSort(SDL_Renderer *renderer, int array[], int low, int high)
     }
 }
 
+// Enum to select which algorithm to display
 typedef enum
 {
     BUBBLE_SORT,
@@ -174,6 +200,7 @@ int main(int argc, char **argv)
 {
     Algorithm algorithm;
 
+    // Check the user input for which algorthim to use
     if (argc > 1)
     {
         if (STREQ(argv[1], "bubble"))
@@ -186,6 +213,7 @@ int main(int argc, char **argv)
             algorithm = QUICKSORT;
         else
         {
+            // Help message if invalid input or "help"
             printf("Usage: sortvisualizer <OPTIONS>\n");
             printf("Options:\n");
             printf("\thelp\t\tPrint help message\n");
@@ -197,26 +225,24 @@ int main(int argc, char **argv)
         }
     }
 
+    // SDL initialize with video only
     SDL_Init(SDL_INIT_VIDEO);
 
+    // Create SDL window and renderer
     SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
+    // Generate random array to sort
     int array[ARRAY_SIZE];
     GenerateRandomArray(array);
 
+    // Event loop
     bool running = true;
     bool sorted = false;
     SDL_Event event;
     while (running)
     {
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                running = false;
-            }
-        }
+        CheckEvent();
 
         if (!sorted)
         {
@@ -237,6 +263,7 @@ int main(int argc, char **argv)
         DisplayArray(renderer, array);
     }
 
+    // Free SDL resources
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
