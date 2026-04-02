@@ -32,6 +32,9 @@
 #define KEYBIND_LEFT SDLK_A
 #define KEYBIND_RIGHT SDLK_D
 
+// Delay in ms
+#define DELAY 50
+
 typedef enum
 {
     UP,
@@ -224,7 +227,7 @@ int main(void)
 
         // Present rendered frame
         SDL_RenderPresent(renderer);
-        SDL_Delay(50);
+        SDL_Delay(DELAY);
     }
 
     return 0;
