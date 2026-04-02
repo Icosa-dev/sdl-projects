@@ -8,6 +8,8 @@
 #include <SDL3/SDL_gamepad.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#include <stdio.h>
 
 #define CELL_SIZE 10
 #define ARRAY_SIZE 50
@@ -18,7 +20,9 @@
 #define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
 #define WINDOW_HEIGHT (ROWS * CELL_SIZE)
 
-#define DELAY 25
+#define STREQ(str1, str2) (strcmp(str1, str2) == 0)
+
+#define DELAY 50
 
 void GenerateRandomArray(int array[ARRAY_SIZE])
 {
@@ -58,6 +62,7 @@ void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     SDL_RenderPresent(renderer);
 }
 
+// Sorting algorithms
 void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     for (int i = 0; i < ARRAY_SIZE; i++)
@@ -77,8 +82,121 @@ void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     }
 }
 
-int main(void)
+void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
+    for (int i = 0; i < ARRAY_SIZE - 1; i++)
+    {
+        int min_idx = i;
+        for (int j = i + 1; j < ARRAY_SIZE; j++)
+        {
+            if (array[j] < array[min_idx])
+            {
+                min_idx = j;
+            }
+        }
+        int temp = array[min_idx];
+        array[min_idx] = array[i];
+        array[i] = temp;
+
+        DisplayArray(renderer, array);
+        SDL_Delay(DELAY);
+    }
+}
+
+void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+{
+    for (int i = 1; i < ARRAY_SIZE; i++)
+    {
+        int key = array[i];
+        int j = i - 1;
+
+        while (j >= 0 && array[j] > key)
+        {
+            array[j + 1] = array[j];
+            j = j - 1;
+            
+            DisplayArray(renderer, array);
+            SDL_Delay(DELAY / 2); 
+        }
+        array[j + 1] = key;
+
+        DisplayArray(renderer, array);
+        SDL_Delay(DELAY);
+    }
+}
+
+int Partition(SDL_Renderer *renderer, int array[], int low, int high)
+{
+    int pivot = array[high];
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++)
+    {
+        if (array[j] < pivot)
+        {
+            i++;
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+
+            DisplayArray(renderer, array);
+            SDL_Delay(DELAY);
+        }
+    }
+    int temp = array[i + 1];
+    array[i + 1] = array[high];
+    array[high] = temp;
+
+    DisplayArray(renderer, array);
+    SDL_Delay(DELAY);
+    return (i + 1);
+}
+
+void QuickSort(SDL_Renderer *renderer, int array[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = Partition(renderer, array, low, high);
+        QuickSort(renderer, array, low, pi - 1);
+        QuickSort(renderer, array, pi + 1, high);
+    }
+}
+
+typedef enum
+{
+    BUBBLE_SORT,
+    SELECTION_SORT,
+    INSERTION_SORT,
+    QUICKSORT
+} Algorithm;
+
+int main(int argc, char **argv)
+{
+    Algorithm algorithm;
+
+    if (argc > 1)
+    {
+        if (STREQ(argv[1], "bubble"))
+            algorithm = BUBBLE_SORT;
+        else if (STREQ(argv[1], "selection"))
+            algorithm = SELECTION_SORT;
+        else if (STREQ(argv[1], "insertion"))
+            algorithm = INSERTION_SORT;
+        else if (STREQ(argv[1], "quick"))
+            algorithm = QUICKSORT;
+        else
+        {
+            printf("Usage: sortvisualizer <OPTIONS>\n");
+            printf("Options:\n");
+            printf("\thelp\t\tPrint help message\n");
+            printf("\tbubble\t\tUse bubble sort algorithm\n");
+            printf("\tselection\t\tUse selection sort algorithm\n");
+            printf("\tinsertion\t\tUse insertion sort algorthim\n");
+            printf("\tquick\t\tUse quicksort algorithm\n");
+            return 0;
+        }
+    }
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -102,7 +220,17 @@ int main(void)
 
         if (!sorted)
         {
-            BubbleSort(renderer, array);
+            switch (algorithm)
+            {
+            case BUBBLE_SORT:
+                BubbleSort(renderer, array); break;
+            case SELECTION_SORT:
+                SelectionSort(renderer, array); break;
+            case INSERTION_SORT:
+                InsertionSort(renderer, array); break;
+            case QUICKSORT:
+                QuickSort(renderer, array, 0, ARRAY_SIZE); break;
+            }
             sorted = true;
         }
 
