@@ -5,6 +5,8 @@
  */
 
 #include <SDL3/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Grid values
 #define CELL_SIZE 15
@@ -84,6 +86,22 @@ float GetRandomY()
     return (float)(SDL_rand(ROWS) * CELL_SIZE);
 }
 
+void GameOverScreen(SDL_Renderer *renderer)
+{
+    SDL_Event event;
+    for (;;)
+    {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_EVENT_QUIT)
+            {
+                SDL_Quit();
+                exit(0);
+            }
+        }
+    }
+}
+
 int main(void)
 {
     // Initialize SDL
@@ -117,16 +135,24 @@ int main(void)
 
             if (event.type == SDL_EVENT_KEY_DOWN)
             {
-                switch(event.key.key)
+                switch (event.key.key)
                 {
                 case KEYBIND_UP:
-                    snake.direction = UP; break;
+                    if (snake.direction != DOWN)
+                        snake.direction = UP;
+                    break;
                 case KEYBIND_DOWN:
-                    snake.direction = DOWN; break;
+                    if (snake.direction != UP)
+                        snake.direction = DOWN;
+                    break;
                 case KEYBIND_LEFT:
-                    snake.direction = LEFT; break;
+                    if (snake.direction != RIGHT)
+                        snake.direction = LEFT;
+                    break;
                 case KEYBIND_RIGHT:
-                    snake.direction = RIGHT; break;
+                    if (snake.direction != LEFT)
+                        snake.direction = RIGHT;
+                    break;
                 }
             }
         }
@@ -134,10 +160,18 @@ int main(void)
         SDL_FRect newHead = *GetSegment(&snake, 0);
         switch (snake.direction)
         {
-            case UP: newHead.y -= CELL_SIZE; break;
-            case DOWN: newHead.y += CELL_SIZE; break;
-            case LEFT: newHead.x -= CELL_SIZE; break;
-            case RIGHT: newHead.x += CELL_SIZE; break;
+        case UP:
+            newHead.y -= CELL_SIZE;
+            break;
+        case DOWN:
+            newHead.y += CELL_SIZE;
+            break;
+        case LEFT:
+            newHead.x -= CELL_SIZE;
+            break;
+        case RIGHT:
+            newHead.x += CELL_SIZE;
+            break;
         }
 
         // Snake-apple collision detection
@@ -149,6 +183,10 @@ int main(void)
             apple.y = GetRandomY();
         }
 
+        // Snake-border collision detection
+        if (newHead.x == WINDOW_WIDTH || newHead.y == WINDOW_HEIGHT)
+            GameOverScreen(renderer);
+
         // Update snake body
         PushBack(&snake, newHead);
         if (!ateApple)
@@ -159,8 +197,8 @@ int main(void)
         {
             SDL_FRect *segment = GetSegment(&snake, i);
             if (newHead.x == segment->x && newHead.y == segment->y)
-                snake.size = 1;
-        }        
+                GameOverScreen(renderer);
+        }
 
         // Clear renderer
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
