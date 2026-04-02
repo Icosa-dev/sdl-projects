@@ -17,6 +17,10 @@
 #define TITLE "Snake"
 #define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
 #define WINDOW_HEIGHT (ROWS * CELL_SIZE)
+#define UPPER_BOUND_X WINDOW_WIDTH
+#define UPPER_BOUND_Y WINDOW_HEIGHT
+#define LOWER_BOUND_X (-CELL_SIZE)
+#define LOWER_BOUND_Y (-CELL_SIZE)
 
 // Snake deque can only be as large as the enitire grid
 #define SNAKE_MAX_SIZE (ROWS * COLUMNS)
@@ -179,12 +183,15 @@ int main(void)
         if (newHead.x == apple.x && newHead.y == apple.y)
         {
             ateApple = true;
+
+            // NOTE: This does not check if the apple generates in the snake body
             apple.x = GetRandomX();
             apple.y = GetRandomY();
         }
 
         // Snake-border collision detection
-        if (newHead.x == WINDOW_WIDTH || newHead.y == WINDOW_HEIGHT)
+        if (newHead.x == LOWER_BOUND_X || newHead.x == UPPER_BOUND_X
+            || newHead.y == LOWER_BOUND_Y|| newHead.y == UPPER_BOUND_X)
             GameOverScreen(renderer);
 
         // Update snake body
