@@ -190,8 +190,8 @@ int main(int argc, char **argv)
             printf("Options:\n");
             printf("\thelp\t\tPrint help message\n");
             printf("\tbubble\t\tUse bubble sort algorithm\n");
-            printf("\tselection\t\tUse selection sort algorithm\n");
-            printf("\tinsertion\t\tUse insertion sort algorthim\n");
+            printf("\tselection\tUse selection sort algorithm\n");
+            printf("\tinsertion\tUse insertion sort algorthim\n");
             printf("\tquick\t\tUse quicksort algorithm\n");
             return 0;
         }
