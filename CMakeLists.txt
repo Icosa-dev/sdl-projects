@@ -7,3 +7,4 @@ CPMAddPackage("gh:libsdl-org/SDL#release-3.4.2")
 
 add_subdirectory("snake/")
 add_subdirectory("gameoflife")
+add_subdirectory("sortvisualizer")
