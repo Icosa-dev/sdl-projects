@@ -150,18 +150,18 @@ int main(int argc, char **argv)
         }
 
         // Clear renderer
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, BLACK);
         SDL_RenderClear(renderer);
 
         // Render snake
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, WHITE);
         for (int i = 0; i < snake.size; i++)
         {
             SDL_RenderFillRect(renderer, GetSegment(&snake, i));
         }
 
         // Render apple
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, RED);
         SDL_RenderFillRect(renderer, &apple);
 
         // Present rendered frame

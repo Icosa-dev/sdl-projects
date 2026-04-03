@@ -16,6 +16,11 @@
 #define ROWS 50
 #define COLUMNS 50
 
+// Colors
+#define BLACK 0, 0, 0, 255
+#define WHITE 255, 255, 255, 255
+#define RED 255, 0, 0, 255
+
 // Delay in milliseconds
 #define DELAY 50
 
