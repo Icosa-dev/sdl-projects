@@ -2,9 +2,7 @@
  * Copyright (c) 2026 LJC
  *
  * SPDX-License-Identifier: MIT
- */
-
-/*
+ *
  * Main.c - Entry point for the game
  *
  * A basic snake game implemented in SDL3. Keybinds are WASD and can be
