@@ -5,7 +5,8 @@ A collection of projects implemented with SDL3 mostly in C.
 ## build
 
 ```
-# assuming you cloned and are in the project root directory
+git clone https://github.com/Icosa-dev/sdl-projects.git
+cd sdl-projects
 mkdir build
 cd build
 cmake ..
