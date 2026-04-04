@@ -9,7 +9,7 @@
 #include <time.h>
 #include "Grid.h"
 
-int CountNeighbors(Grid grid, int r, int c)
+static int CountNeighbors(Grid grid, int r, int c)
 {
     int count = 0;
 

@@ -32,18 +32,18 @@
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
 // Generate random possition values for apple generation
-float GetRandomX()
+static float GetRandomX()
 {
     return (float)(SDL_rand(COLUMNS) * CELL_SIZE);
 }
 
-float GetRandomY()
+static float GetRandomY()
 {
     return (float)(SDL_rand(ROWS) * CELL_SIZE);
 }
 
 // Freeze the screen when game over
-void GameOverScreen(SDL_Renderer *renderer)
+static void GameOverScreen(SDL_Renderer *renderer)
 {
     SDL_Event event;
     for (;;)

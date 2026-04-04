@@ -30,7 +30,7 @@
 #define DELAY 50
 
 // Generate a random array to sort
-void GenerateRandomArray(int array[ARRAY_SIZE])
+static void GenerateRandomArray(int array[ARRAY_SIZE])
 {
     srand(time(NULL));
 
@@ -53,7 +53,7 @@ void GenerateRandomArray(int array[ARRAY_SIZE])
 }
 
 // Display the array as a bar graph on the screen
-void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -74,7 +74,7 @@ void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 }
 
 // Check if the user quit
-void CheckEvent()
+static void CheckEvent()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -82,7 +82,7 @@ void CheckEvent()
 }
 
 // Sorting algorithms
-void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
@@ -102,7 +102,7 @@ void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     }
 }
 
-void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     for (int i = 0; i < ARRAY_SIZE - 1; i++)
     {
@@ -124,7 +124,7 @@ void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     }
 }
 
-void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
 {
     for (int i = 1; i < ARRAY_SIZE; i++)
     {
@@ -148,7 +148,7 @@ void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
     }
 }
 
-int Partition(SDL_Renderer *renderer, int array[], int low, int high)
+static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
 {
     int pivot = array[high];
     int i = (low - 1);
@@ -177,7 +177,7 @@ int Partition(SDL_Renderer *renderer, int array[], int low, int high)
     return (i + 1);
 }
 
-void QuickSort(SDL_Renderer *renderer, int array[], int low, int high)
+static void QuickSort(SDL_Renderer *renderer, int array[], int low, int high)
 {
     if (low < high)
     {
