@@ -15,9 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Snake.h"
-#include "Input.h"
 #include "Definitions.h"
+#include "Input.h"
+#include "Snake.h"
 
 // Window values
 #define TITLE "Snake"
