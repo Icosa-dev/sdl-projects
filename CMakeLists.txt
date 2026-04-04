@@ -6,5 +6,5 @@ include(cmake/CPM.cmake)
 CPMAddPackage("gh:libsdl-org/SDL#release-3.4.2")
 
 add_subdirectory("snake")
-add_subdirectory("gameoflife")
-add_subdirectory("sortvisualizer")
+add_subdirectory("cgl")
+add_subdirectory("sv")

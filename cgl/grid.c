@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "Grid.h"
+#include "grid.h"
 
-static int CountNeighbors(Grid grid, int r, int c)
+static int count_neighbors(grid g, int r, int c)
 {
     int count = 0;
 
@@ -32,7 +32,7 @@ static int CountNeighbors(Grid grid, int r, int c)
             if (row >= 0 && row < ROWS && col >= 0 && col < COLUMNS)
             {
                 // If the neighbor is alive add to count
-                if (grid[row][col] == ALIVE)
+                if (g[row][col] == ALIVE)
                     count++;
             }
         }
@@ -41,17 +41,17 @@ static int CountNeighbors(Grid grid, int r, int c)
     return count;
 }
 
-void UpdateGrid(Grid grid)
+void update_grid(grid g)
 {
-    // Hold next generation of cells
-    Grid tempGrid;
+    /* Hold next generation of cells */
+    grid tmp;
 
     for (int r = 0; r < ROWS; r++)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            int count = CountNeighbors(grid, r, c);
-            bool currentCell = grid[r][c];
+            int count = count_neighbors(g, r, c);
+            bool current_cell = g[r][c];
 
             /*
              * RULES:
@@ -66,29 +66,29 @@ void UpdateGrid(Grid grid)
              *
              * 4) Survival: If none of the above are met the state of the cell persists.
              */
-            if (currentCell == ALIVE && count < 2)
-                tempGrid[r][c] = false; // death by underpopulation
-            else if (currentCell == ALIVE && count > 3)
-                tempGrid[r][c] = false; // death by overpopulation
-            else if (currentCell == DEAD && count == 3)
-                tempGrid[r][c] = true; // reproduction
+            if (current_cell == ALIVE && count < 2)
+                tmp[r][c] = false; /* death by underpopulation */
+            else if (current_cell == ALIVE && count > 3)
+                tmp[r][c] = false; /* death by overpopulation */
+            else if (current_cell == DEAD && count == 3)
+                tmp[r][c] = true; /* reproduction */
             else
-                tempGrid[r][c] = currentCell; // survival
+                tmp[r][c] = current_cell; /* survival */
         }
     }
 
-    // Copy the temporary grid into the actual board
+    /* Copy the temporary grid into the actual board */
     for (int r = 0; r < ROWS; r++)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            grid[r][c] = tempGrid[r][c];
+            g[r][c] = tmp[r][c];
         }
     }
 }
 
-// Generate a random grid
-void GenerateRandomGrid(Grid grid)
+/* Generate a random grid */
+void generate_random_grid(grid g)
 {
     srand(time(NULL));
 
@@ -96,7 +96,7 @@ void GenerateRandomGrid(Grid grid)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            grid[r][c] = rand() % 2;
+            g[r][c] = rand() % 2;
         }
     }
 }

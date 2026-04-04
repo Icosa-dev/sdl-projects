@@ -1,4 +1,4 @@
-set(SUBPROJECT_NAME gameoflife)
+set(SUBPROJECT_NAME sv)
 file(GLOB_RECURSE SOURCES "*.c")
 
 add_executable(${SUBPROJECT_NAME} ${SOURCES})

@@ -10,15 +10,15 @@
 #define INPUT_H
 
 #include <stdbool.h>
-#include "Snake.h"
+#include "snake.h"
 
-// Keybinds. Default is WASD.
+/* Keybinds. Default is WASD. */
 #define KEYBIND_UP SDLK_W
 #define KEYBIND_DOWN SDLK_S
 #define KEYBIND_LEFT SDLK_A
 #define KEYBIND_RIGHT SDLK_D
 
-extern void GetInput(Snake *snake, bool *running);
-extern void GetCPUInput(Snake *snake, bool *running);
+extern void get_input(struct snake *snake, bool *running);
+extern void get_cpu_input(struct snake *snake, bool *running);
 
 #endif

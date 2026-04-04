@@ -13,53 +13,55 @@
 #include <string.h>
 #include <stdio.h>
 
-// Grid values
+/* Grid values */
 #define CELL_SIZE 5
 #define ARRAY_SIZE 200
 #define COLUMNS ARRAY_SIZE
 #define ROWS ARRAY_SIZE
 
-// Window values
+/* Window values */
 #define TITLE "Sort Visualizer"
 #define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
 #define WINDOW_HEIGHT (ROWS * CELL_SIZE)
 
-// String comparison macro
+/* String comparison macro */
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
-// Delay in milliseconds
+/* Delay in milliseconds */
 #define DELAY 25
 
-// Colors
+/* Colors */
 #define WHITE 255, 255, 255, 255
 #define BLACK 0, 0, 0, 255
 #define GREEN 0, 255, 0, 255
 
-// Generate a random array to sort
-static void GenerateRandomArray(int array[ARRAY_SIZE])
+/* Generate a random array to sort */
+static void generate_random_array(int arr[ARRAY_SIZE])
 {
     srand(time(NULL));
 
-    // Fill the array with sorted values. The array 
-    // that is generated will have 1 of each value
-    // from 1-50.
+    /*
+     * Fill the array with sorted values. The array 
+     * that is generated will have 1 of each value
+     * from 1-50.
+     */
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
-        array[i] = i + 1;
+        arr[i] = i + 1;
     }
 
-    // Shuffle the array
+    /* Shuffle the array */
     for (int i = ARRAY_SIZE - 1; i > 0; i--)
     {
         int j = rand() % (i + 1);
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
 
-// Display the array as a bar graph on the screen
-static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE], bool sorted)
+/* Display the array as a bar graph on the screen */
+static void display_array(SDL_Renderer *renderer, int arr[ARRAY_SIZE], bool sorted)
 {
     SDL_SetRenderDrawColor(renderer, BLACK);
     SDL_RenderClear(renderer);
@@ -72,9 +74,9 @@ static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE], bool sor
     {
         SDL_FRect rect = {
             (float)i * CELL_SIZE,
-            (float)WINDOW_HEIGHT - (array[i] * CELL_SIZE),
+            (float)WINDOW_HEIGHT - (arr[i] * CELL_SIZE),
             (float)CELL_SIZE - 1,
-            (float)array[i] * CELL_SIZE
+            (float)arr[i] * CELL_SIZE
         };
         SDL_RenderFillRect(renderer, &rect);
     }
@@ -82,89 +84,89 @@ static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE], bool sor
     SDL_RenderPresent(renderer);
 }
 
-// Check if the user quit
-static void CheckEvent()
+/* Check if the user quit */
+static void check_event()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
         if (event.type == SDL_EVENT_QUIT) { SDL_Quit(); exit(0); }
 }
 
-// Sorting algorithms
-static void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+/* Sorting algorithms */
+static void bubble_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
         for (int j = 0; j < ARRAY_SIZE - i - 1; j++)
         {
-            CheckEvent();
-            if (array[j] > array[j + 1])
+            check_event();
+            if (arr[j] > arr[j + 1])
             {
-                int temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
                 
-                DisplayArray(renderer, array, false);
+                display_array(renderer, arr, false);
                 SDL_Delay(DELAY);
             }
         }
     }
 }
 
-static void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void selection_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
     for (int i = 0; i < ARRAY_SIZE - 1; i++)
     {
         int min_idx = i;
         for (int j = i + 1; j < ARRAY_SIZE; j++)
         {
-            CheckEvent();
-            if (array[j] < array[min_idx])
+            check_event();
+            if (arr[j] < arr[min_idx])
             {
                 min_idx = j;
             }
         }
-        int temp = array[min_idx];
-        array[min_idx] = array[i];
-        array[i] = temp;
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
 
-        DisplayArray(renderer, array, false);
+        display_array(renderer, arr, false);
         SDL_Delay(DELAY);
     }
 }
 
-static void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void insertion_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
     for (int i = 1; i < ARRAY_SIZE; i++)
     {
-        int key = array[i];
+        int key = arr[i];
         int j = i - 1;
 
-        while (j >= 0 && array[j] > key)
+        while (j >= 0 && arr[j] > key)
         {
-            CheckEvent();
+            check_event();
 
-            array[j + 1] = array[j];
+            arr[j + 1] = arr[j];
             j = j - 1;
             
-            DisplayArray(renderer, array, false);
+            display_array(renderer, arr, false);
             SDL_Delay(DELAY / 2); 
         }
-        array[j + 1] = key;
+        arr[j + 1] = key;
 
-        DisplayArray(renderer, array, false);
+        display_array(renderer, arr, false);
         SDL_Delay(DELAY);
     }
 }
 
-static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
+static int partition(SDL_Renderer *renderer, int array[], int low, int high)
 {
     int pivot = array[high];
     int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++)
     {
-        CheckEvent();
+        check_event();
 
         if (array[j] < pivot)
         {
@@ -173,7 +175,7 @@ static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
             array[i] = array[j];
             array[j] = temp;
 
-            DisplayArray(renderer, array, false);
+            display_array(renderer, array, false);
             SDL_Delay(DELAY);
         }
     }
@@ -181,45 +183,45 @@ static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
     array[i + 1] = array[high];
     array[high] = temp;
 
-    DisplayArray(renderer, array, false);
+    display_array(renderer, array, false);
     SDL_Delay(DELAY);
     return (i + 1);
 }
 
-static void QuickSort(SDL_Renderer *renderer, int array[], int low, int high)
+static void quicksort(SDL_Renderer *renderer, int array[], int low, int high)
 {
     if (low < high)
     {
-        int pi = Partition(renderer, array, low, high);
-        QuickSort(renderer, array, low, pi - 1);
-        QuickSort(renderer, array, pi + 1, high);
+        int pi = partition(renderer, array, low, high);
+        quicksort(renderer, array, low, pi - 1);
+        quicksort(renderer, array, pi + 1, high);
     }
 }
 
-// Enum to select which algorithm to display
-typedef enum
+/* Enum to select which algorithm to display */
+enum algorithm
 {
     BUBBLE_SORT,
     SELECTION_SORT,
     INSERTION_SORT,
     QUICKSORT
-} Algorithm;
+};
 
 int main(int argc, char **argv)
 {
-    Algorithm algorithm;
+    enum algorithm selected_algorithm;
 
-    // Check the user input for which algorthim to use
+    /* Check the user input for which algorthim to use */
     if (argc > 1)
     {
         if (STREQ(argv[1], "bubble"))
-            algorithm = BUBBLE_SORT;
+            selected_algorithm = BUBBLE_SORT;
         else if (STREQ(argv[1], "selection"))
-            algorithm = SELECTION_SORT;
+            selected_algorithm = SELECTION_SORT;
         else if (STREQ(argv[1], "insertion"))
-            algorithm = INSERTION_SORT;
+            selected_algorithm = INSERTION_SORT;
         else if (STREQ(argv[1], "quick"))
-            algorithm = QUICKSORT;
+            selected_algorithm = QUICKSORT;
         else
         {
             // Help message if invalid input or "help"
@@ -233,46 +235,49 @@ int main(int argc, char **argv)
             return 0;
         }
     }
+    else 
+        selected_algorithm = BUBBLE_SORT; /* default to bubble */
+    
 
-    // SDL initialize with video only
+    /* SDL initialize with video only */
     SDL_Init(SDL_INIT_VIDEO);
 
-    // Create SDL window and renderer
+    /* Create SDL window and renderer */
     SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-    // Generate random array to sort
+    /* Generate random array to sort */
     int array[ARRAY_SIZE];
-    GenerateRandomArray(array);
+    generate_random_array(array);
 
-    // Event loop
+    /* Event loop */
     bool running = true;
     bool sorted = false;
     SDL_Event event;
     while (running)
     {
-        CheckEvent();
+        check_event();
 
         if (!sorted)
         {
-            switch (algorithm)
+            switch (selected_algorithm)
             {
             case BUBBLE_SORT:
-                BubbleSort(renderer, array); break;
+                bubble_sort(renderer, array); break;
             case SELECTION_SORT:
-                SelectionSort(renderer, array); break;
+                selection_sort(renderer, array); break;
             case INSERTION_SORT:
-                InsertionSort(renderer, array); break;
+                insertion_sort(renderer, array); break;
             case QUICKSORT:
-                QuickSort(renderer, array, 0, ARRAY_SIZE); break;
+                quicksort(renderer, array, 0, ARRAY_SIZE); break;
             }
             sorted = true;
         }
 
-        DisplayArray(renderer, array, sorted);
+        display_array(renderer, array, sorted);
     }
 
-    // Free SDL resources
+    /* Free SDL resources */
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

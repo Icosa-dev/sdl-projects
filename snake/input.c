@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "Input.h"
-#include "Snake.h"
+#include "input.h"
+#include "snake.h"
 
-void GetInput(Snake *snake, bool *running)
+void get_input(struct snake *snake, bool *running)
 {
     SDL_Event event;
 
@@ -41,11 +41,11 @@ void GetInput(Snake *snake, bool *running)
     }
 }
 
-void GetCPUInput(Snake *snake, bool *running)
+void get_cpu_input(struct snake *snake, bool *running)
 {
     static int alternator = 0;
 
-    // Check if user quit
+    /* Check if user quit */
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {

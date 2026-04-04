@@ -15,34 +15,34 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "Definitions.h"
-#include "Grid.h"
+#include "definitions.h"
+#include "grid.h"
 
-// Window values
+/* Window values */
 #define TITLE "Game of Life"
 #define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
 #define WINDOW_HEIGHT (ROWS * CELL_SIZE)
 
 int main(void)
 {
-    // Initialize SDL with only video
+    /* Initialize SDL with only video */
     SDL_Init(SDL_INIT_VIDEO);
 
-    // Initialize SDL window and renderer
+    /* Initialize SDL window and renderer */
     SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-    // Randomize the grid of cells
-    Grid grid;
-    GenerateRandomGrid(grid);
+    /* Randomize the grid of cells */
+    grid grid;
+    generate_random_grid(grid);
 
-    // Event loop
+    /* Event loop */
     bool running = true;
     SDL_Event event;
-    int generationCount = 1;
+    int generation_count = 1;
     while (running)
     {
-        // Check if the user quit
+        /* Check if the user quit */
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_EVENT_QUIT)
@@ -51,14 +51,14 @@ int main(void)
             }
         }
 
-        // Update the grid
-        UpdateGrid(grid);
+        /* Update the grid */
+        update_grid(grid);
 
-        // Clear the renderer
+        /* Clear the renderer */
         SDL_SetRenderDrawColor(renderer, BLACK);
         SDL_RenderClear(renderer);
 
-        // Draw the grid
+        /* Draw the grid */
         SDL_SetRenderDrawColor(renderer, WHITE);
         for (int r = 0; r < ROWS; r++)
         {
@@ -67,7 +67,7 @@ int main(void)
                 float x = c * CELL_SIZE;
                 float y = r * CELL_SIZE;
 
-                // Only draw alive cells with white
+                /* Only draw alive cells with white */
                 if (grid[r][c] == ALIVE)
                 {
                     SDL_RenderFillRect(renderer, &(SDL_FRect){x, y, CELL_SIZE, CELL_SIZE});
@@ -75,16 +75,16 @@ int main(void)
             }
         }
 
-        // Print generation count info 
-        printf("Generation: %d\n", generationCount);
+        /* Print generation count info */
+        printf("Generation: %d\n", generation_count);
         fflush(stdout);
-        generationCount++;
+        generation_count++;
 
-        // Present the rendered frame 
+        /* Present the rendered frame */
         SDL_RenderPresent(renderer);
     }
 
-    // Free SDL resources
+    /* Free SDL resources */
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

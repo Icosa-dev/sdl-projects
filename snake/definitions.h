@@ -9,17 +9,17 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-// Grid values
+/* Grid values */
 #define CELL_SIZE 15
 #define ROWS 50
 #define COLUMNS 50
 
-// Colors
+/* Colors */
 #define BLACK 0, 0, 0, 255
 #define WHITE 255, 255, 255, 255
 #define RED 255, 0, 0, 255
 
-// Delay in milliseconds
+/* Delay in milliseconds */
 #define DELAY 50
 
 #endif
