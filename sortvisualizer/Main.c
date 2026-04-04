@@ -7,14 +7,15 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_render.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
 
 // Grid values
-#define CELL_SIZE 10
-#define ARRAY_SIZE 50
+#define CELL_SIZE 5
+#define ARRAY_SIZE 200
 #define COLUMNS ARRAY_SIZE
 #define ROWS ARRAY_SIZE
 
@@ -27,7 +28,12 @@
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
 // Delay in milliseconds
-#define DELAY 50
+#define DELAY 25
+
+// Colors
+#define WHITE 255, 255, 255, 255
+#define BLACK 0, 0, 0, 255
+#define GREEN 0, 255, 0, 255
 
 // Generate a random array to sort
 static void GenerateRandomArray(int array[ARRAY_SIZE])
@@ -53,12 +59,15 @@ static void GenerateRandomArray(int array[ARRAY_SIZE])
 }
 
 // Display the array as a bar graph on the screen
-static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE])
+static void DisplayArray(SDL_Renderer *renderer, int array[ARRAY_SIZE], bool sorted)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, BLACK);
     SDL_RenderClear(renderer);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    if (sorted)
+        SDL_SetRenderDrawColor(renderer, GREEN);
+    else
+        SDL_SetRenderDrawColor(renderer, WHITE);
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
         SDL_FRect rect = {
@@ -95,7 +104,7 @@ static void BubbleSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
                 
-                DisplayArray(renderer, array);
+                DisplayArray(renderer, array, false);
                 SDL_Delay(DELAY);
             }
         }
@@ -119,7 +128,7 @@ static void SelectionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
         array[min_idx] = array[i];
         array[i] = temp;
 
-        DisplayArray(renderer, array);
+        DisplayArray(renderer, array, false);
         SDL_Delay(DELAY);
     }
 }
@@ -138,12 +147,12 @@ static void InsertionSort(SDL_Renderer *renderer, int array[ARRAY_SIZE])
             array[j + 1] = array[j];
             j = j - 1;
             
-            DisplayArray(renderer, array);
+            DisplayArray(renderer, array, false);
             SDL_Delay(DELAY / 2); 
         }
         array[j + 1] = key;
 
-        DisplayArray(renderer, array);
+        DisplayArray(renderer, array, false);
         SDL_Delay(DELAY);
     }
 }
@@ -164,7 +173,7 @@ static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
             array[i] = array[j];
             array[j] = temp;
 
-            DisplayArray(renderer, array);
+            DisplayArray(renderer, array, false);
             SDL_Delay(DELAY);
         }
     }
@@ -172,7 +181,7 @@ static int Partition(SDL_Renderer *renderer, int array[], int low, int high)
     array[i + 1] = array[high];
     array[high] = temp;
 
-    DisplayArray(renderer, array);
+    DisplayArray(renderer, array, false);
     SDL_Delay(DELAY);
     return (i + 1);
 }
@@ -260,7 +269,7 @@ int main(int argc, char **argv)
             sorted = true;
         }
 
-        DisplayArray(renderer, array);
+        DisplayArray(renderer, array, sorted);
     }
 
     // Free SDL resources
