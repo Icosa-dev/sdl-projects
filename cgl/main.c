@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Main.c - Entry point for the game
+ * main.c - Entry point for the game
  *
  * An implementation of Conway's Game of Life with SDL3 in C. The board
  * is randomly generated each time and the generation count is printed to the console.

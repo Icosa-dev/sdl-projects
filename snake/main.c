@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Main.c - Entry point for the game
+ * main.c - Entry point for the game
  *
  * A basic snake game implemented in SDL3. Keybinds are WASD and can be
  * changed by updating the KEYBIND macros. If you want the CPU to play for

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  *
- * Snake.h - Structures and functions for storing and manipulating 
+ * snake.h - Structures and functions for storing and manipulating 
  * the data that represents the snake in the game.
  */
 

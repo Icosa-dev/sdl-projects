@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  *
- * Input.h - Functionality for getting input from the user or CPU
+ * input.h - Functionality for getting input from the user or CPU
  */
 
 #ifndef INPUT_H

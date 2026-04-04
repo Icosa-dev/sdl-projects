@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  *
- * Definitions.h - Common macro definitions
+ * definitions.h - Common macro definitions
  */
 
 #ifndef DEFINITIONS_H
