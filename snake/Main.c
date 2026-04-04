@@ -99,7 +99,10 @@ int main(int argc, char **argv)
     while (running)
     {
         // Event handling
-        GetInput(&snake, &running);
+        if (CPUEnabled)
+            GetCPUInput(&snake, &running);
+        else
+            GetInput(&snake, &running);
 
         SDL_FRect newHead = *GetSegment(&snake, 0);
         switch (snake.direction)

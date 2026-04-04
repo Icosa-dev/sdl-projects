@@ -18,6 +18,7 @@
 #define KEYBIND_LEFT SDLK_A
 #define KEYBIND_RIGHT SDLK_D
 
-extern void GetInput(Snake *snake, bool *input);
+extern void GetInput(Snake *snake, bool *running);
+extern void GetCPUInput(Snake *snake, bool *running);
 
 #endif
