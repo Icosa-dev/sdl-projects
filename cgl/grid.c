@@ -9,7 +9,7 @@
 #include <time.h>
 #include "grid.h"
 
-static int count_neighbors(grid g, int r, int c)
+static int count_neighbors(grid_t grid, int r, int c)
 {
     int count = 0;
 
@@ -32,7 +32,7 @@ static int count_neighbors(grid g, int r, int c)
             if (row >= 0 && row < ROWS && col >= 0 && col < COLUMNS)
             {
                 // If the neighbor is alive add to count
-                if (g[row][col] == ALIVE)
+                if (grid[row][col] == ALIVE)
                     count++;
             }
         }
@@ -41,17 +41,17 @@ static int count_neighbors(grid g, int r, int c)
     return count;
 }
 
-void update_grid(grid g)
+void update_grid(grid_t grid)
 {
     /* Hold next generation of cells */
-    grid tmp;
+    grid_t tmp;
 
     for (int r = 0; r < ROWS; r++)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            int count = count_neighbors(g, r, c);
-            bool current_cell = g[r][c];
+            int count = count_neighbors(grid, r, c);
+            bool current_cell = grid[r][c];
 
             /*
              * RULES:
@@ -82,13 +82,13 @@ void update_grid(grid g)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            g[r][c] = tmp[r][c];
+            grid[r][c] = tmp[r][c];
         }
     }
 }
 
 /* Generate a random grid */
-void generate_random_grid(grid g)
+void generate_random_grid(grid_t grid)
 {
     srand(time(NULL));
 
@@ -96,7 +96,7 @@ void generate_random_grid(grid g)
     {
         for (int c = 0; c < COLUMNS; c++)
         {
-            g[r][c] = rand() % 2;
+            grid[r][c] = rand() % 2;
         }
     }
 }
