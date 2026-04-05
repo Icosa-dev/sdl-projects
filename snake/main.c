@@ -99,9 +99,11 @@ int main(int argc, char **argv)
 	while (running) {
 		/* Event handling */
 		if (CPUEnabled)
-			get_cpu_input(&snake, &running);
+			get_cpu_input(&snake, &apple, UPPER_BOUND_X,
+				      UPPER_BOUND_Y, LOWER_BOUND_X,
+				      LOWER_BOUND_Y, &running);
 		else
-			get_input(&snake, &running);
+			get_user_input(&snake, &running);
 
 		SDL_FRect new_head = *get_segment(&snake, 0);
 		switch (snake.direction) {

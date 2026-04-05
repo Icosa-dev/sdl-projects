@@ -10,7 +10,6 @@
 #define INPUT_H
 
 #include <stdbool.h>
-#include "snake.h"
 
 /* Keybinds. Default is WASD. */
 #define KEYBIND_UP SDLK_W
@@ -18,7 +17,13 @@
 #define KEYBIND_LEFT SDLK_A
 #define KEYBIND_RIGHT SDLK_D
 
-extern void get_input(struct snake *snake, bool *running);
-extern void get_cpu_input(struct snake *snake, bool *running);
+typedef struct SDL_FRect SDL_FRect;
+struct snake;
+
+extern void get_user_input(struct snake *snake, bool *running);
+extern void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
+			  float upper_bound_x, float upper_bound_y,
+			  float lower_bound_x, float lower_bound_y,
+			  bool *running);
 
 #endif

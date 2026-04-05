@@ -20,6 +20,6 @@
 #define RED 255, 0, 0, 255
 
 /* Delay in milliseconds */
-#define DELAY 50
+#define DELAY 10
 
 #endif
