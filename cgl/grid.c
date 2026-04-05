@@ -8,6 +8,7 @@
 #include <string.h>
 #include <time.h>
 #include "grid.h"
+#include "definitions.h"
 
 static int count_neighbors(grid_t grid, int r, int c)
 {
