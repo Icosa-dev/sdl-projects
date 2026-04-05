@@ -32,14 +32,27 @@
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
 /* Generate random possition values for apple generation */
-static float get_rand_x()
+static void get_rand_pos(float *out_x, float *out_y, struct snake *snake)
 {
-	return (float)(SDL_rand(COLUMNS) * CELL_SIZE);
-}
+	bool overlapping;
+	do
+	{
+		overlapping = false;
 
-static float get_rand_y()
-{
-	return (float)(SDL_rand(ROWS) * CELL_SIZE);
+		*out_x = (float)(SDL_rand(COLUMNS) * CELL_SIZE);
+		*out_y = (float)(SDL_rand(ROWS) * CELL_SIZE);
+
+		for (int i = 0; i < snake->size; i++)
+		{
+			SDL_FRect *seg = get_segment(snake, i);
+			
+			if (*out_x == seg->x && *out_y == seg->y)
+			{
+				overlapping = true;
+				break;
+			}
+		}
+	} while (overlapping);
 }
 
 /* Freeze the screen when game over */
@@ -93,7 +106,8 @@ int main(int argc, char **argv)
 
 	/* Create apple */
 	SDL_FRect apple =
-		(SDL_FRect){ get_rand_x(), get_rand_y(), CELL_SIZE, CELL_SIZE };
+		(SDL_FRect){ 0, 0, CELL_SIZE, CELL_SIZE };
+	get_rand_pos(&(apple.x), &(apple.y), &snake);
 
 	/* Game loop */
 	bool running = true;
@@ -126,10 +140,7 @@ int main(int argc, char **argv)
 		bool ate_apple = false;
 		if (new_head.x == apple.x && new_head.y == apple.y) {
 			ate_apple = true;
-
-			/* NOTE: This does not check if the apple generates in the snake body */
-			apple.x = get_rand_x();
-			apple.y = get_rand_y();
+			get_rand_pos(&(apple.x), &(apple.y), &snake);
 		}
 
 		/* Snake-border collision detection */
