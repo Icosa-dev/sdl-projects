@@ -19,5 +19,6 @@ struct color
 #define BLACK (struct color){0, 0, 0, 255}
 #define WHITE (struct color){255, 255, 255, 255}
 #define RED (struct color){255, 0, 0, 255}
+#define GREEN (struct color){0, 255, 0 , 255}
 
 #endif
