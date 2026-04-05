@@ -5,36 +5,89 @@
  */
 
 #include <SDL3/SDL.h>
+#include <stdlib.h>
 #include "snake.h"
 
 /* Initialize the snake with values 0 and default direction UP */
-void init_snake(struct snake *snake)
+struct snake *init_snake()
 {
-    snake->head = 0;
+    struct snake *snake = malloc(sizeof(struct snake));
+    snake->head = NULL;
+    snake->tail = NULL;
     snake->size = 0;
     snake->direction = UP;
+
+    return snake;
 }
 
 /* Push an SDL_FRect to the front of the snake deque */
-void push_back(struct snake *snake, SDL_FRect rect)
+void push_front(struct snake *snake, SDL_FRect rect)
 {
-    if (snake->size >= SNAKE_MAX_SIZE)
-        return;
+    struct snake_node *new_node = malloc(sizeof(struct snake_node));
+    new_node->rect = rect;
+    new_node->next = snake->head;
+    new_node->prev = NULL;
 
-    snake->head = (snake->head - 1 + SNAKE_MAX_SIZE) % SNAKE_MAX_SIZE;
-    snake->elements[snake->head] = rect;
-    if (snake->size < SNAKE_MAX_SIZE)
-        snake->size++;
+    if (snake->head != NULL)
+        snake->head->prev = new_node;
+
+    snake->head = new_node;
+
+    if (snake->tail == NULL)
+        snake->tail = new_node;
+
+    snake->size++;
 }
 
 void pop_back(struct snake *snake)
 {
-    if (snake->size > 0)
-        snake->size--;
+    if (snake->head == NULL) return;
+
+    if (snake->head == snake->tail)
+    {
+        free(snake->head);
+        snake->head = NULL;
+        snake->tail = NULL;
+    } else  
+    {
+        struct snake_node *current = snake->head;
+        while (current->next != snake->tail)
+            current = current->next;
+
+        free(snake->tail);
+        snake->tail = current;
+        snake->tail->next = NULL;
+    }
+
+    snake->size--;
 }
 
 SDL_FRect *get_segment(struct snake *snake, int index)
 {
-    int actualIndex = (snake->head + index) % SNAKE_MAX_SIZE;
-    return &snake->elements[actualIndex];
+    if (index < 0 || index >= snake->size) return NULL;
+
+    struct snake_node *current = snake->head;
+    for (int i = 0; i < index; i++)
+        current = current->next;
+
+    return &current->rect;
+}
+
+void free_snake(struct snake *snake)
+{
+    if (snake == NULL) return;
+
+    struct snake_node *current = snake->head;
+    struct snake_node *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+
+    snake->head = NULL;
+    snake->tail = NULL;
+    snake->size = 0;
 }

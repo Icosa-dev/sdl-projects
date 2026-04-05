@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "definitions.h"
+#include "config.h"
 #include "input.h"
 #include "snake.h"
 
-void get_user_input(struct snake *snake, bool *running)
+void get_user_input(struct snake *snake, const struct config *config,
+	bool *running)
 {
 	SDL_Event event;
 
@@ -19,36 +20,27 @@ void get_user_input(struct snake *snake, bool *running)
 
 		if (event.type == SDL_EVENT_KEY_DOWN)
 		{
-			switch (event.key.key)
-			{
-			case KEYBIND_UP:
-				if (snake->direction != DOWN)
-					snake->direction = UP;
-				break;
-			case KEYBIND_DOWN:
-				if (snake->direction != UP)
-					snake->direction = DOWN;
-				break;
-			case KEYBIND_LEFT:
-				if (snake->direction != RIGHT)
-					snake->direction = LEFT;
-				break;
-			case KEYBIND_RIGHT:
-				if (snake->direction != LEFT)
-					snake->direction = RIGHT;
-				break;
-			}
+			SDL_Keycode key = event.key.key;
+
+			if (key == config->keybind_up && snake->direction != DOWN)
+				snake->direction = UP;
+			else if (key == config->keybind_down && snake->direction != UP)
+				snake->direction = DOWN;
+			else if (key == config->keybind_left && snake->direction != RIGHT)
+				snake->direction = LEFT;
+			else if (key == config->keybind_right && snake->direction != LEFT)
+				snake->direction = RIGHT;
 		}
 	}
 }
 
 static enum direction get_longest_direction(float x, float y,
-	float upper_bound_x, float upper_bound_y)
+	const struct config *config)
 {
-	int ix = (int)(x / CELL_SIZE);
-	int iy = (int)(y / CELL_SIZE);
-	int grid_w = (int)(upper_bound_x / CELL_SIZE);
-	int grid_h = (int)(upper_bound_y / CELL_SIZE);
+	int ix = (int)(x / config->cell_size);
+	int iy = (int)(y / config->cell_size);
+	int grid_w = (int)(config->window_width / config->cell_size);
+	int grid_h = (int)(config->window_height / config->cell_size);
 
 	if (ix == 0 && iy > 0)
 	{
@@ -88,8 +80,7 @@ static enum direction get_longest_direction(float x, float y,
  * Truely the future of software!
  */
 void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
-	float upper_bound_x, float upper_bound_y, float lower_bound_x,
-	float lower_bound_y, bool *running)
+	const struct config *config, bool *running)
 {
 	/* Check if user quit */
 	SDL_Event event;
@@ -100,6 +91,6 @@ void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
 	}
 
 	SDL_FRect *current_head = get_segment(snake, 0);
-	snake->direction = get_longest_direction(current_head->x,
-		current_head->y, upper_bound_x, upper_bound_y);
+	snake->direction = get_longest_direction(current_head->x, current_head->y,
+		config);
 }

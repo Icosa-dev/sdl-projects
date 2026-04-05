@@ -15,37 +15,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "definitions.h"
+#include "config.h"
 #include "input.h"
 #include "snake.h"
-
-/* Window values */
-#define TITLE "Snake"
-#define WINDOW_WIDTH (COLUMNS * CELL_SIZE)
-#define WINDOW_HEIGHT (ROWS * CELL_SIZE)
-#define UPPER_BOUND_X WINDOW_WIDTH
-#define UPPER_BOUND_Y WINDOW_HEIGHT
-#define LOWER_BOUND_X (-CELL_SIZE)
-#define LOWER_BOUND_Y (-CELL_SIZE)
 
 /* String comparison macro for argparsing */
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
 /* Generate random possition values for apple generation */
-static void get_rand_pos(float *out_x, float *out_y, struct snake *snake)
+static void get_rand_pos(float *out_x, float *out_y, struct snake *snake,
+	const struct config *config)
 {
 	bool overlapping;
 	do
 	{
 		overlapping = false;
 
-		*out_x = (float)(SDL_rand(COLUMNS) * CELL_SIZE);
-		*out_y = (float)(SDL_rand(ROWS) * CELL_SIZE);
+		*out_x = (float)(SDL_rand(config->columns) * config->cell_size);
+		*out_y = (float)(SDL_rand(config->rows) * config->cell_size);
 
 		for (int i = 0; i < snake->size; i++)
 		{
 			SDL_FRect *seg = get_segment(snake, i);
-			
+
 			if (*out_x == seg->x && *out_y == seg->y)
 			{
 				overlapping = true;
@@ -59,9 +51,12 @@ static void get_rand_pos(float *out_x, float *out_y, struct snake *snake)
 static void game_over_screen(SDL_Renderer *renderer)
 {
 	SDL_Event event;
-	for (;;) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_EVENT_QUIT) {
+	for (;;)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_EVENT_QUIT)
+			{
 				SDL_Quit();
 				exit(0);
 			}
@@ -71,17 +66,20 @@ static void game_over_screen(SDL_Renderer *renderer)
 
 int main(int argc, char **argv)
 {
-	bool CPUEnabled = false;
-	int delay = 50;
+	struct config config = STD_CONFIG;
 
-	if (argc > 1) {
-		if (STREQ(argv[1], "help")) {
+	if (argc > 1)
+	{
+		if (STREQ(argv[1], "help"))
+		{
 			printf("Usage: snake <OPTIONS>\n");
 			printf("Options:\n");
 			printf("\thelp:\t\tPrint help message\n");
 			printf("\tcpu:\t\tHave the computer play for you\n");
-		} else if (STREQ(argv[1], "cpu")) {
-			CPUEnabled = true; delay = 1;
+		} else if (STREQ(argv[1], "cpu"))
+		{
+			config.cpu_enabled = true;
+			config.delay = 1;
 		}
 	}
 
@@ -89,98 +87,102 @@ int main(int argc, char **argv)
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
 	/* Create window and renderer */
-	SDL_Window *window =
-		SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+	SDL_Window *window = SDL_CreateWindow(config.title, config.window_width,
+		config.window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
 	/* Create snake */
-	struct snake snake;
-	init_snake(&snake);
-	/* 
+	struct snake *snake = init_snake();
+	/*
 	 * Push the first segment of the snake with
-     * possition in the middle of the window
-     */
-	push_back(&snake, (SDL_FRect){ (float)WINDOW_WIDTH / 2,
-				       (float)WINDOW_HEIGHT / 2, CELL_SIZE,
-				       CELL_SIZE });
+	 * possition in the middle of the window
+	 */
+	push_front(snake,
+		(SDL_FRect) { (float)config.window_width / 2,
+			(float)config.window_height / 2, config.cell_size,
+			config.cell_size });
 
 	/* Create apple */
-	SDL_FRect apple =
-		(SDL_FRect){ 0, 0, CELL_SIZE, CELL_SIZE };
-	get_rand_pos(&(apple.x), &(apple.y), &snake);
+	SDL_FRect apple = (SDL_FRect) { 0, 0, config.cell_size, config.cell_size };
+	get_rand_pos(&(apple.x), &(apple.y), snake, &config);
 
 	/* Game loop */
 	bool running = true;
-	while (running) {
+	while (running)
+	{
 		/* Event handling */
-		if (CPUEnabled)
-			get_cpu_input(&snake, &apple, UPPER_BOUND_X,
-				      UPPER_BOUND_Y, LOWER_BOUND_X,
-				      LOWER_BOUND_Y, &running);
+		if (config.cpu_enabled)
+			get_cpu_input(snake, &apple, &config, &running);
 		else
-			get_user_input(&snake, &running);
+			get_user_input(snake, &config, &running);
 
-		SDL_FRect new_head = *get_segment(&snake, 0);
-		switch (snake.direction) {
+		SDL_FRect new_head = snake->head->rect;
+		switch (snake->direction)
+		{
 		case UP:
-			new_head.y -= CELL_SIZE;
+			new_head.y -= config.cell_size;
 			break;
 		case DOWN:
-			new_head.y += CELL_SIZE;
+			new_head.y += config.cell_size;
 			break;
 		case LEFT:
-			new_head.x -= CELL_SIZE;
+			new_head.x -= config.cell_size;
 			break;
 		case RIGHT:
-			new_head.x += CELL_SIZE;
+			new_head.x += config.cell_size;
 			break;
 		}
 
 		/* Snake-apple collision detection */
 		bool ate_apple = false;
-		if (new_head.x == apple.x && new_head.y == apple.y) {
+		if (new_head.x == apple.x && new_head.y == apple.y)
+		{
 			ate_apple = true;
-			get_rand_pos(&(apple.x), &(apple.y), &snake);
+			get_rand_pos(&(apple.x), &(apple.y), snake, &config);
 		}
 
 		/* Snake-border collision detection */
-		if (new_head.x == LOWER_BOUND_X ||
-		    new_head.x == UPPER_BOUND_X ||
-		    new_head.y == LOWER_BOUND_Y || new_head.y == UPPER_BOUND_X)
+		if (new_head.x == (-config.cell_size) ||
+			new_head.x == config.window_width ||
+			new_head.y == (-config.cell_size) ||
+			new_head.y == config.window_height)
 			game_over_screen(renderer);
 
 		/* Update snake body */
-		push_back(&snake, new_head);
+		push_front(snake, new_head);
 		if (!ate_apple)
-			pop_back(
-				&snake); /* remove back segment if not growing */
+			pop_back(snake); /* remove back segment if not growing */
 
 		/* Snake-snake collision detection */
-		for (int i = 1; i < snake.size; i++) {
-			SDL_FRect *segment = get_segment(&snake, i);
-			if (new_head.x == segment->x &&
-			    new_head.y == segment->y)
+		for (int i = 1; i < snake->size; i++)
+		{
+			SDL_FRect *segment = get_segment(snake, i);
+			if (new_head.x == segment->x && new_head.y == segment->y)
 				game_over_screen(renderer);
 		}
 
 		/* Clear renderer */
-		SDL_SetRenderDrawColor(renderer, BLACK);
+		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(config.board_color));
 		SDL_RenderClear(renderer);
 
 		/* Render snake */
-		SDL_SetRenderDrawColor(renderer, WHITE);
-		for (int i = 0; i < snake.size; i++) {
-			SDL_RenderFillRect(renderer, get_segment(&snake, i));
+		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(config.snake_color));
+		for (int i = 0; i < snake->size; i++)
+		{
+			SDL_RenderFillRect(renderer, get_segment(snake, i));
 		}
 
 		/* Render apple */
-		SDL_SetRenderDrawColor(renderer, RED);
+		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(config.apple_color));
 		SDL_RenderFillRect(renderer, &apple);
 
 		/* Present rendered frame */
 		SDL_RenderPresent(renderer);
-		SDL_Delay(delay);
+		SDL_Delay(config.delay);
 	}
+
+	/* Free snake */
+	free_snake(snake);
 
 	/* Free SDL resources */
 	SDL_DestroyRenderer(renderer);

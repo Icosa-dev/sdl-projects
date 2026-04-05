@@ -33,7 +33,7 @@ int main(void)
     SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
     /* Randomize the grid of cells */
-    grid grid;
+    grid_t grid;
     generate_random_grid(grid);
 
     /* Event loop */
