@@ -93,10 +93,51 @@ static bool is_valid(struct snake *snake, float upper_bound_x,
 		next_x >= upper_bound_x || next_y >= upper_bound_y)
 		return false;
 
-    if (segment_at(snake, next_x, next_y))
-        return false;
+	if (segment_at(snake, next_x, next_y))
+		return false;
 
 	return true;
+}
+
+static enum direction get_longest_direction(float x, float y,
+	float upper_bound_x, float upper_bound_y)
+{
+	int ix = (int)(x / CELL_SIZE);
+	int iy = (int)(y / CELL_SIZE);
+	int grid_w = (int)(upper_bound_x / CELL_SIZE);
+	int grid_h = (int)(upper_bound_y / CELL_SIZE);
+
+	if (ix == 0 && iy > 0)
+	{
+		return UP;
+	}
+
+	if (iy == 0 && ix < grid_w - 1)
+	{
+		return RIGHT;
+	}
+
+	if (ix == grid_w - 1 && iy % 2 == 0)
+	{
+		return DOWN;
+	}
+	if (ix == 1 && iy % 2 != 0 && iy < grid_h - 1)
+	{
+		return DOWN;
+	}
+
+	if (iy == grid_h - 1 && ix > 0)
+	{
+		return LEFT;
+	}
+
+	if (iy % 2 == 0)
+	{
+		return RIGHT;
+	} else
+	{
+		return LEFT;
+	}
 }
 
 /*
@@ -143,34 +184,6 @@ void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
 	}
 
 	SDL_FRect *current_head = get_segment(snake, 0);
-
-/* This is stupid and hack-y */
-#define MOVE(direction)                                            \
-	move_snake(snake, direction, upper_bound_x, upper_bound_y, lower_bound_x, \
-		lower_bound_y)
-
-	/* Apple is left of snake head */
-	if (apple->x < current_head->x)
-	{
-		MOVE(LEFT);
-	}
-	/* Apple is right of snake head */
-	else if (apple->x > current_head->x)
-	{
-		MOVE(RIGHT);
-	} else
-	{
-		/* Apple is currently below head*/
-		if (apple->y > current_head->y)
-		{
-			MOVE(DOWN);
-		}
-		/* Apple is currently above head*/
-		else if (apple->y < current_head->y)
-		{
-			MOVE(UP);
-		}
-	}
-
-#undef MOVE
+	snake->direction = get_longest_direction(current_head->x,
+		current_head->y, upper_bound_x, upper_bound_y);
 }

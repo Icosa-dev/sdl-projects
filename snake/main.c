@@ -59,6 +59,7 @@ static void game_over_screen(SDL_Renderer *renderer)
 int main(int argc, char **argv)
 {
 	bool CPUEnabled = false;
+	int delay = 50;
 
 	if (argc > 1) {
 		if (STREQ(argv[1], "help")) {
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 			printf("\thelp:\t\tPrint help message\n");
 			printf("\tcpu:\t\tHave the computer play for you\n");
 		} else if (STREQ(argv[1], "cpu")) {
-			CPUEnabled = true;
+			CPUEnabled = true; delay = 1;
 		}
 	}
 
@@ -167,7 +168,7 @@ int main(int argc, char **argv)
 
 		/* Present rendered frame */
 		SDL_RenderPresent(renderer);
-		SDL_Delay(DELAY);
+		SDL_Delay(delay);
 	}
 
 	/* Free SDL resources */
