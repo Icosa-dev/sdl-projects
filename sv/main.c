@@ -33,7 +33,8 @@ int delay = 25;
 #define DELAY delay
 
 /* Generate a random array to sort */
-static void generate_random_array(int arr[ARRAY_SIZE])
+static void
+generate_random_array(int arr[ARRAY_SIZE])
 {
 	srand(time(NULL));
 
@@ -58,8 +59,8 @@ static void generate_random_array(int arr[ARRAY_SIZE])
 }
 
 /* Display the array as a bar graph on the screen */
-static void display_array(SDL_Renderer *renderer, int arr[ARRAY_SIZE],
-	bool sorted)
+static void
+display_array(SDL_Renderer *renderer, int arr[ARRAY_SIZE], bool sorted)
 {
 	SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(BLACK));
 	SDL_RenderClear(renderer);
@@ -80,7 +81,8 @@ static void display_array(SDL_Renderer *renderer, int arr[ARRAY_SIZE],
 }
 
 /* Check if the user quit */
-static void check_event()
+static void
+check_event()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -92,7 +94,8 @@ static void check_event()
 }
 
 /* Sorting algorithms */
-static void bubble_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
+static void
+bubble_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
 	for (int i = 0; i < ARRAY_SIZE; i++)
 	{
@@ -112,7 +115,8 @@ static void bubble_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 	}
 }
 
-static void selection_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
+static void
+selection_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
 	for (int i = 0; i < ARRAY_SIZE - 1; i++)
 	{
@@ -134,7 +138,8 @@ static void selection_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 	}
 }
 
-static void insertion_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
+static void
+insertion_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 {
 	for (int i = 1; i < ARRAY_SIZE; i++)
 	{
@@ -158,7 +163,8 @@ static void insertion_sort(SDL_Renderer *renderer, int arr[ARRAY_SIZE])
 	}
 }
 
-static int partition(SDL_Renderer *renderer, int array[], int low, int high)
+static int
+partition(SDL_Renderer *renderer, int array[], int low, int high)
 {
 	int pivot = array[high];
 	int i = (low - 1);
@@ -187,7 +193,8 @@ static int partition(SDL_Renderer *renderer, int array[], int low, int high)
 	return (i + 1);
 }
 
-static void quicksort(SDL_Renderer *renderer, int array[], int low, int high)
+static void
+quicksort(SDL_Renderer *renderer, int array[], int low, int high)
 {
 	if (low < high)
 	{
@@ -206,7 +213,8 @@ enum algorithm
 	QUICKSORT
 };
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
 	enum algorithm selected_algorithm;
 

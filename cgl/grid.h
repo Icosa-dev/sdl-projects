@@ -8,6 +8,7 @@
 #define GRID_H
 
 #include <stdbool.h>
+
 #include "definitions.h"
 
 #define ALIVE true

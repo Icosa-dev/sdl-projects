@@ -8,8 +8,8 @@
 #include "input.h"
 #include "snake.h"
 
-void get_user_input(struct snake *snake, const struct config *config,
-	bool *running)
+void
+get_user_input(struct snake *snake, const struct config *config, bool *running)
 {
 	SDL_Event event;
 
@@ -34,8 +34,8 @@ void get_user_input(struct snake *snake, const struct config *config,
 	}
 }
 
-static enum direction get_longest_direction(float x, float y,
-	const struct config *config)
+static enum direction
+get_longest_direction(float x, float y, const struct config *config)
 {
 	int ix = (int)(x / config->cell_size);
 	int iy = (int)(y / config->cell_size);
@@ -79,7 +79,8 @@ static enum direction get_longest_direction(float x, float y,
  * Finally! The first snake game to be fully AI powered!
  * Truely the future of software!
  */
-void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
+void
+get_cpu_input(struct snake *snake, const SDL_FRect *apple,
 	const struct config *config, bool *running)
 {
 	/* Check if user quit */

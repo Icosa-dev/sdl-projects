@@ -23,7 +23,8 @@
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
 /* Generate random possition values for apple generation */
-static void get_rand_pos(float *out_x, float *out_y, struct snake *snake,
+static void
+get_rand_pos(float *out_x, float *out_y, struct snake *snake,
 	const struct config *config)
 {
 	bool overlapping;
@@ -48,7 +49,8 @@ static void get_rand_pos(float *out_x, float *out_y, struct snake *snake,
 }
 
 /* Freeze the screen when game over */
-static void game_over_screen(SDL_Renderer *renderer)
+static void
+game_over_screen(SDL_Renderer *renderer)
 {
 	SDL_Event event;
 	for (;;)
@@ -64,7 +66,8 @@ static void game_over_screen(SDL_Renderer *renderer)
 	}
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
 	struct config config = STD_CONFIG;
 

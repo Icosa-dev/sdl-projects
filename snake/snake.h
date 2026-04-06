@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * snake.h - Structures and functions for storing and manipulating 
+ * snake.h - Structures and functions for storing and manipulating
  * the data that represents the snake in the game.
  */
 
@@ -17,25 +17,25 @@
 /* Direction enum for the snake's direction */
 enum direction
 {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
 };
 
 struct snake_node
 {
-    SDL_FRect rect;
-    struct snake_node *next;
-    struct snake_node *prev;
+	SDL_FRect rect;
+	struct snake_node *next;
+	struct snake_node *prev;
 };
 
 struct snake
 {
-    struct snake_node *head;
-    struct snake_node *tail;
-    int size;
-    enum direction direction;
+	struct snake_node *head;
+	struct snake_node *tail;
+	int size;
+	enum direction direction;
 };
 
 /* Initialize the snake with values 0 and default direction UP */
