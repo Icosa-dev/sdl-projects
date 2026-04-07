@@ -15,11 +15,11 @@
 #include "snake.h"
 
 #define PROGRAM_NAME "snake"
+#define DESCRIPTION "A basic snake game implementation in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
 #define MIT_LICENSE_TEXT                                                                \
-	"Copyright (c) " __DATE__ " AUTHORS "                                               \
-	"\n\n"                                                                              \
+	"Copyright (c) " __DATE__  " " AUTHORS "\n\n"                                       \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
 	"in the Software without restriction, including without limitation the rights\n"    \
@@ -41,7 +41,8 @@
 static void
 print_version(void)
 {
-	printf("%s %s\n%s\n", PROGRAM_NAME, VERSION, MIT_LICENSE_TEXT);
+	printf("%s: %s (%s)\n%s\n", PROGRAM_NAME, DESCRIPTION, VERSION,
+		MIT_LICENSE_TEXT);
 	exit(0);
 }
 
@@ -92,7 +93,8 @@ freeze_screen(void)
  * @param max_y The max y value
  */
 static void
-get_rand_pos(SDL_FRect *rect, struct snake *snake, int cell_size, int rows, int columns)
+get_rand_pos(SDL_FRect *rect, struct snake *snake, int cell_size, int rows,
+	int columns)
 {
 	bool overlapping;
 	do
@@ -122,7 +124,7 @@ main(int argc, char **argv)
 	int cell_size = 25;
 	int rows = 20;
 	int columns = 20;
-    int snake_max_size = rows * columns;
+	int snake_max_size = rows * columns;
 
 	int window_width = columns * cell_size;
 	int window_height = rows * cell_size;
@@ -246,8 +248,8 @@ main(int argc, char **argv)
 				freeze_screen();
 		}
 
-        if (snake->size == snake_max_size)
-            freeze_screen();
+		if (snake->size == snake_max_size)
+			freeze_screen();
 
 		/* Clear screen */
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(BLACK));
