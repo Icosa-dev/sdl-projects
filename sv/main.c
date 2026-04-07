@@ -12,8 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#include "../include/color.h"
+#include <color.h>
 
 #define CELL_SIZE 5
 int array_size = 201;

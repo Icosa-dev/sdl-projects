@@ -8,8 +8,7 @@
 #define CONFIG_H
 
 #include <SDL3/SDL.h>
-
-#include "../include/color.h"
+#include <color.h>
 
 /* Configuration variables for the game */
 struct config
