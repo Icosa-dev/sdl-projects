@@ -2,23 +2,50 @@
  * Copyright (c) 2026 LJC
  *
  * SPDX-License-Identifier: MIT
- *
- * input.h - Functionality for getting input from the user or CPU
  */
 
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef INPUT_H_
+#define INPUT_H_
 
-#include <stdbool.h>
+#include <SDL3/SDL.h>
 
-#include "config.h"
+struct keybinds
+{
+	SDL_Keycode up, down, left, right;
+};
 
-typedef struct SDL_FRect SDL_FRect;
+#define WASD                           \
+	(struct keybinds)                  \
+	{                                  \
+		SDLK_W, SDLK_S, SDLK_A, SDLK_D \
+	}
+#define ARROWS                                    \
+	(struct keybinds)                             \
+	{                                             \
+		SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT \
+	}
+
 struct snake;
 
-extern void get_user_input(struct snake *snake, const struct config *config,
-	bool *running);
-extern void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
-	const struct config *config, bool *running);
+/**
+ * @brief Get the user input object
+ * 
+ * @param snake 
+ * @param keybinds 
+ * @param running 
+ */
+extern void get_user_input(struct snake *snake, const struct keybinds *keybinds, bool *running);
+
+/**
+ * @brief Get the cpu input object
+ * 
+ * @param snake 
+ * @param apple 
+ * @param running 
+ * @param cell_size 
+ * @param window_width 
+ * @param window_height 
+ */
+extern void get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running, int cell_size, int window_width, int window_height);
 
 #endif
