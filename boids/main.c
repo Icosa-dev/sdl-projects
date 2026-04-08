@@ -5,225 +5,197 @@
  */
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_oldnames.h>
 #include <SDL3/SDL_render.h>
-#include <math.h>
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_video.h>
+#include <color.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "../include/color.h"
+#include "boid.h"
 
-#define TITLE "Boids"
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 1000
+#define PROGRAM_NAME "boids"
+#define DESCRIPTION \
+	"A basic implementation of the boids swarm intelligence program in SDL3"
+#define AUTHORS "LJC"
+#define VERSION "v0.1.0"
+#define MIT_LICENSE_TEXT                                                                \
+	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
+	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
+	"of this software and associated documentation files (the \"Software\"), to deal\n" \
+	"in the Software without restriction, including without limitation the rights\n"    \
+	"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n"       \
+	"copies of the Software, and to permit persons to whom the Software is\n"           \
+	"furnished to do so, subject to the following conditions:\n\n"                      \
+	"The above copyright notice and this permission notice shall be included in all\n"  \
+	"copies or substantial portions of the Software.\n\n"                               \
+	"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n"    \
+	"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n"        \
+	"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n"     \
+	"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n"          \
+	"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n"   \
+	"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n"   \
+	"SOFTWARE."
 
-#define SEPARATION 0.05
-#define ALIGNMENT 0.05
-#define COHESION 0.0005
-#define PROTECTED_RANGE 2
-#define VISUAL_RANGE 20
-#define EDGE_AVOIDANCE_FACTOR 0.2
-#define MAX_SPEED 3
-#define MIN_SPEED 2
-#define EDGE_MARGIN 50
+#define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
-#define BOIDS_COUNT 1000
-#define BOID_SIZE 5
-
-#define DELAY 16
-
-struct boid
+static void
+print_version(void)
 {
-	SDL_FRect body;
-	float vx, vy;
-	float direction; // up is 0, right is 90, etc
-	float protected_range;
-	float visual_range;
-	float edge_margin;
-	float separation_factor;
-	float alignment_factor;
-	float cohesion_factor;
-	float edge_avoidance_factor;
-	float max_speed;
-	float min_speed;
-};
-
-static float dist_to_boid(const struct boid *boid1, const struct boid *boid2)
-{
-	float dy = boid2->body.y - boid1->body.y;
-	float dx = boid2->body.x - boid1->body.x;
-
-	return sqrtf(dx * dx + dy * dy);
+	printf("%s: %s (%s)\n%s\n", PROGRAM_NAME, DESCRIPTION, VERSION,
+		MIT_LICENSE_TEXT);
+	exit(0);
 }
 
-static void calculate_separation(struct boid *boid, int idx,
-	const struct boid *boids, int boids_count)
+static void
+print_help(void)
 {
-	float close_dx = 0;
-	float close_dy = 0;
+	printf("Usage: sv [OPTIONS]\n");
+	printf("Options:\n");
+	printf("\t-h, --help\t\t\tPrint this help message and exit\n");
+	printf("\t-v, --version\t\t\tPrint the version message and exit\n");
+	printf(
+		"\t--profile [birds, fish, insects]\n\t\t\t\t\tSet default values to reflect a kind of animal\n");
+	printf("\t--boid-count <int>\t\tSet the number of boids to simulate\n");
+	printf("\t--boid-size <int>\t\tSet the size of each boid in pixels\n");
+	printf(
+		"\t--separation <int> \t\tSet the amount each boid should steer to avoid a flockmate\n");
+	printf(
+		"\t--alignment <int> \t\tSet the amount each boid should steer towards the average direction of the flock\n");
+	printf(
+		"\t--cohesion <int> \t\tSet the amount each boid should steer towards the center of the flock\n");
+	printf(
+		"\t--protected-range <int>\t\tSet the distance at which the boid should avoid other boids\n");
+	printf(
+		"\t--visual-range <int>\t\tSet the distance at which a boid can be affected by other boids\n");
+	printf(
+		"\t--edge-avoidance <int>\t\tSet the amount each boid should avoid the edge of the screen\n");
+	printf("\t--max-speed\t\t\tSet the max speed of the boids\n");
+	printf("\t--min-speed\t\t\tSet the min speed of the boids\n");
+	printf(
+		"\t--edge-margin\t\t\tSet the distance from the edge of the screen at which boids should steer away\n");
+	exit(0);
+}
 
-	for (int i = 0; i < boids_count; i++)
+/**
+ * @brief Get a random position value
+ * 
+ * @param max The max possible position 
+ * @return float A random position 
+ */
+static float
+get_rand_pos(int max)
+{
+	return SDL_randf() * max;
+}
+
+/**
+ * @brief Get a random velocity value
+ * 
+ * @return float A random velocity
+ */
+static float
+get_rand_vel()
+{
+	return SDL_randf() * 4 - 2;
+}
+
+int
+main(int argc, char **argv)
+{
+	const int window_width = 1000;
+	const int window_height = 1000;
+
+	int boid_count = 500;
+	int boid_size = 5;
+	float separation_factor = 0.05;
+	float alignment_factor = 0.05;
+	float cohesion_factor = 0.0005;
+	int protected_range = 8;
+	int visual_range = 40;
+	float edge_avoidance_factor = 0.2;
+	float max_speed = 4;
+	float min_speed = 2;
+	int edge_margin = 50;
+
+	int delay = 16;
+
+	if (argc > 1)
 	{
-		if (i == idx)
-			continue;
-
-		const struct boid *other_boid = &boids[i];
-
-		if (dist_to_boid(boid, other_boid) < boid->protected_range)
+		for (int i = 0; i < argc; i++)
 		{
-			close_dx += boid->body.x - other_boid->body.x;
-			close_dy += boid->body.y - other_boid->body.y;
+			const char *arg = argv[i];
+
+			if (STREQ(arg, "-v") || STREQ(arg, "--version"))
+				print_version();
+			else if (STREQ(arg, "-h") || STREQ(arg, "--help"))
+				print_help();
+
+			if (i + 1 < argc)
+			{
+				const char *value = argv[i + 1];
+				if (STREQ(arg, "--boid-count"))
+					boid_count = atoi(value);
+				else if (STREQ(arg, "--profile"))
+				{
+					if (STREQ(value, "fish"))
+					{
+						/* Values for fish school simulation */
+						visual_range = 75;
+						cohesion_factor = 0.005;
+						alignment_factor = 0.1;
+						protected_range = 12;
+					} else if (STREQ(value, "insects"))
+					{
+						/* Values for insect swarm simulation */
+						visual_range = 15;
+						max_speed = 5;
+						min_speed = 4;
+						separation_factor = 0.2;
+						alignment_factor = 0.01;
+					}
+				} else if (STREQ(arg, "--boid-size"))
+					boid_size = atoi(value);
+				else if (STREQ(arg, "--separation"))
+					separation_factor *= atof(value);
+				else if (STREQ(arg, "--alignment"))
+					alignment_factor *= atof(value);
+				else if (STREQ(arg, "--cohesion"))
+					cohesion_factor *= atof(value);
+				else if (STREQ(arg, "--protected-range"))
+					protected_range *= atoi(value);
+				else if (STREQ(arg, "--visual-range"))
+					visual_range *= atoi(value);
+				else if (STREQ(arg, "--edge-avoidance"))
+					edge_avoidance_factor *= atof(value);
+				else if (STREQ(arg, "--max-speed"))
+					max_speed *= atof(value);
+				else if (STREQ(arg, "--min-speed"))
+					min_speed *= atof(value);
+				else if (STREQ(arg, "--edge-margin"))
+					edge_margin = atoi(value);
+				else if (STREQ(arg, "--delay"))
+					delay = atoi(value);
+			}
 		}
 	}
 
-	boid->vx += close_dx * boid->separation_factor;
-	boid->vy += close_dy * boid->separation_factor;
-}
-
-static void calculate_alignment(struct boid *boid, int idx,
-	const struct boid *boids, int boids_count)
-{
-	float xvel_avg = 0;
-	float yvel_avg = 0;
-	int neighboring_boids = 0;
-
-	for (int i = 0; i < boids_count; i++)
-	{
-		if (i == idx)
-			continue;
-
-		const struct boid *other_boid = &boids[i];
-
-		if (dist_to_boid(boid, other_boid) < boid->visual_range)
-		{
-			xvel_avg += other_boid->vx;
-			yvel_avg += other_boid->vy;
-			neighboring_boids++;
-		}
-	}
-
-	if (neighboring_boids > 0)
-	{
-		xvel_avg /= neighboring_boids;
-		yvel_avg /= neighboring_boids;
-
-		boid->vx += (xvel_avg - boid->vx) * boid->alignment_factor;
-		boid->vy += (yvel_avg - boid->vy) * boid->alignment_factor;
-	}
-}
-
-static void calculate_cohesion(struct boid *boid, int idx,
-	const struct boid *boids, int boids_count)
-{
-	float xpos_avg = 0;
-	float ypos_avg = 0;
-	int neighboring_boids = 0;
-
-	for (int i = 0; i < boids_count; i++)
-	{
-		if (i == idx)
-			continue;
-
-		const struct boid *other_boid = &boids[i];
-
-		if (dist_to_boid(boid, other_boid) < boid->visual_range)
-		{
-			xpos_avg += other_boid->body.x;
-			ypos_avg += other_boid->body.y;
-			neighboring_boids++;
-		}
-	}
-
-	if (neighboring_boids > 0)
-	{
-		xpos_avg /= neighboring_boids;
-		ypos_avg /= neighboring_boids;
-
-		boid->vx += (xpos_avg - boid->body.x) * boid->cohesion_factor;
-		boid->vy += (ypos_avg - boid->body.y) * boid->cohesion_factor;
-	}
-}
-
-static void calculate_edge_avoidance(struct boid *boid, int window_width,
-	int window_height)
-{
-	float left_margin = boid->edge_margin;
-	float right_margin = window_width - boid->edge_margin;
-	float top_margin = boid->edge_margin;
-	float bottom_margin = window_height - boid->edge_margin;
-
-	if (boid->body.x < left_margin)
-		boid->vx += boid->edge_avoidance_factor;
-
-	if (boid->body.x > right_margin)
-		boid->vx -= boid->edge_avoidance_factor;
-
-	if (boid->body.y > bottom_margin)
-		boid->vy -= boid->edge_avoidance_factor;
-
-	if (boid->body.y < top_margin)
-		boid->vy += boid->edge_avoidance_factor;
-}
-
-static void steer_boids(struct boid *boids, int boids_count, int window_width,
-	int window_height)
-{
-	for (int i = 0; i < boids_count; i++)
-	{
-		struct boid *boid = &boids[i];
-		calculate_alignment(boid, i, boids, boids_count);
-		calculate_separation(boid, i, boids, boids_count);
-		calculate_cohesion(boid, i, boids, boids_count);
-		calculate_edge_avoidance(boid, window_width, window_height);
-
-		float speed = sqrt(boid->vx * boid->vx + boid->vy * boid->vy);
-
-		if (speed > boid->max_speed)
-		{
-			boid->vx = (boid->vx / speed) * boid->max_speed;
-			boid->vy = (boid->vy / speed) * boid->max_speed;
-		}
-		if (speed < boid->min_speed)
-		{
-			boid->vx = (boid->vx / speed) * boid->min_speed;
-			boid->vy = (boid->vy / speed) * boid->min_speed;
-		}
-
-		boid->body.x += boid->vx;
-		boid->body.y += boid->vy;
-	}
-}
-
-static void init_boid(struct boid *boid, int window_width, int window_height,
-	int size)
-{
-	boid->body = (SDL_FRect) { rand() % WINDOW_WIDTH, rand() % WINDOW_HEIGHT, 4,
-		4 };
-	boid->vx = ((float)rand() / RAND_MAX) * 4 - 2;
-	boid->vy = ((float)rand() / RAND_MAX) * 4 - 2;
-
-	boid->protected_range = 10.0f;
-	boid->visual_range = 50.0f;
-	boid->edge_margin = EDGE_MARGIN;
-	boid->separation_factor = 0.05f;
-	boid->alignment_factor = 0.05f;
-	boid->cohesion_factor = 0.0005f;
-	boid->edge_avoidance_factor = EDGE_AVOIDANCE_FACTOR;
-	boid->max_speed = 4.0f;
-	boid->min_speed = 2.0f;
-}
-
-int main(void)
-{
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window *window = SDL_CreateWindow(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT,
-		0);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
+	SDL_Window *window = SDL_CreateWindow(PROGRAM_NAME, window_width,
+		window_height, 0);
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-	struct boid boids[BOIDS_COUNT];
-	for (int i = 0; i < BOIDS_COUNT; i++)
+	struct boid boids[boid_count];
+	for (int i = 0; i < boid_count; i++)
 	{
-		init_boid(&boids[i], WINDOW_WIDTH, WINDOW_HEIGHT, BOID_SIZE);
+		SDL_FRect body = (SDL_FRect) { get_rand_pos(window_width),
+			get_rand_pos(window_height), boid_size, boid_size };
+		boids[i] = (struct boid) { body, get_rand_vel(), get_rand_vel(),
+			protected_range, visual_range, edge_margin, separation_factor,
+			alignment_factor, cohesion_factor, edge_avoidance_factor, max_speed,
+			min_speed };
 	}
 
 	bool running = true;
@@ -236,19 +208,19 @@ int main(void)
 				running = false;
 		}
 
-		steer_boids(boids, BOIDS_COUNT, WINDOW_WIDTH, WINDOW_HEIGHT);
+		steer_boids(boids, boid_count, window_width, window_height);
 
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(BLACK));
 		SDL_RenderClear(renderer);
 
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
-		for (int i = 0; i < BOIDS_COUNT; i++)
+		for (int i = 0; i < boid_count; i++)
 		{
 			SDL_RenderFillRect(renderer, &boids[i].body);
 		}
 
 		SDL_RenderPresent(renderer);
-		SDL_Delay(DELAY);
+		SDL_Delay(delay);
 	}
 
 	SDL_DestroyRenderer(renderer);

@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <SDL3/SDL.h>
 #include <stdlib.h>
-
 #include "snake.h"
 
-/* Initialize the snake with values 0 and default direction UP */
 struct snake *
-init_snake()
+snake_init()
 {
 	struct snake *snake = malloc(sizeof(struct snake));
 	snake->head = NULL;
@@ -22,9 +19,8 @@ init_snake()
 	return snake;
 }
 
-/* Push an SDL_FRect to the front of the snake deque */
 void
-push_front(struct snake *snake, SDL_FRect rect)
+snake_push_front(struct snake *snake, SDL_FRect rect)
 {
 	struct snake_node *new_node = malloc(sizeof(struct snake_node));
 	new_node->rect = rect;
@@ -43,7 +39,7 @@ push_front(struct snake *snake, SDL_FRect rect)
 }
 
 void
-pop_back(struct snake *snake)
+snake_pop_back(struct snake *snake)
 {
 	if (snake->head == NULL)
 		return;
@@ -68,7 +64,7 @@ pop_back(struct snake *snake)
 }
 
 SDL_FRect *
-get_segment(struct snake *snake, int index)
+snake_get_segment(const struct snake *snake, int index)
 {
 	if (index < 0 || index >= snake->size)
 		return NULL;
@@ -81,7 +77,7 @@ get_segment(struct snake *snake, int index)
 }
 
 void
-free_snake(struct snake *snake)
+snake_free(struct snake *snake)
 {
 	if (snake == NULL)
 		return;

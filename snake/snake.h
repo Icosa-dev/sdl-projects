@@ -2,19 +2,13 @@
  * Copyright (c) 2026 LJC
  *
  * SPDX-License-Identifier: MIT
- *
- * snake.h - Structures and functions for storing and manipulating
- * the data that represents the snake in the game.
  */
 
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef SNAKE_H_
+#define SNAKE_H_
 
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_rect.h>
 
-#define SNAKE_MAX_SIZE 16384
-
-/* Direction enum for the snake's direction */
 enum direction
 {
 	UP,
@@ -25,32 +19,55 @@ enum direction
 
 struct snake_node
 {
-	SDL_FRect rect;
-	struct snake_node *next;
-	struct snake_node *prev;
+    SDL_FRect rect;
+    struct snake_node *prev;
+    struct snake_node *next;
 };
 
 struct snake
 {
-	struct snake_node *head;
-	struct snake_node *tail;
-	int size;
-	enum direction direction;
+    struct snake_node *head;
+    struct snake_node *tail;
+    int size;
+    enum direction direction;
 };
 
-/* Initialize the snake with values 0 and default direction UP */
-extern struct snake *init_snake();
+/**
+ * @brief Allocate and initialize a snake structure
+ * 
+ * @return struct snake* Pointer to the new snake structure
+ */
+extern struct snake *snake_init();
 
-/* Push an SDL_FRect to the front of the snake deque */
-extern void push_front(struct snake *snake, SDL_FRect rect);
+/**
+ * @brief Push an SDL_FRect to the front of the snake body
+ * 
+ * @param snake The snake to be modified 
+ * @param rect The SDL_FRect to push to the body
+ */
+extern void snake_push_front(struct snake *snake, SDL_FRect rect);
 
-/* Remove the backmost element from the snake dequeue */
-extern void pop_back(struct snake *snake);
+/**
+ * @brief Remove the backmost element from the snake body
+ * 
+ * @param snake The snake to be modified
+ */
+extern void snake_pop_back(struct snake *snake);
 
-/* Get a segment from the snake deque relative to the head */
-extern SDL_FRect *get_segment(struct snake *snake, int index);
+/**
+ * @brief Get a pointer to a segment of the snake body relative to the head
+ * 
+ * @param snake The snake to get the segment from 
+ * @param index The index of the segment relative to the head 
+ * @return SDL_FRect* Pointer to the segment of the snake body
+ */
+extern SDL_FRect *snake_get_segment(const struct snake *snake, int index);
 
-/* Free snake */
-extern void free_snake(struct snake *snake);
+/**
+ * @brief Free all snake nodes and set values of the snake members to NULL or 0
+ * 
+ * @param snake The snake to free from memory
+ */
+extern void snake_free(struct snake *snake);
 
 #endif

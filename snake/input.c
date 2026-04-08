@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "config.h"
+#include <SDL3/SDL.h>
 #include "input.h"
 #include "snake.h"
 
 void
-get_user_input(struct snake *snake, const struct config *config, bool *running)
+get_user_input(struct snake *snake, const struct keybinds *keybinds, bool *running)
 {
 	SDL_Event event;
 
@@ -22,25 +22,34 @@ get_user_input(struct snake *snake, const struct config *config, bool *running)
 		{
 			SDL_Keycode key = event.key.key;
 
-			if (key == config->keybind_up && snake->direction != DOWN)
+			if (key == keybinds->up && snake->direction != DOWN)
 				snake->direction = UP;
-			else if (key == config->keybind_down && snake->direction != UP)
+			else if (key == keybinds->down && snake->direction != UP)
 				snake->direction = DOWN;
-			else if (key == config->keybind_left && snake->direction != RIGHT)
+			else if (key == keybinds->left && snake->direction != RIGHT)
 				snake->direction = LEFT;
-			else if (key == config->keybind_right && snake->direction != LEFT)
+			else if (key == keybinds->right && snake->direction != LEFT)
 				snake->direction = RIGHT;
 		}
 	}
 }
 
+/**
+ * @brief Get the direction which would create the longest path for the snake
+ *
+ * @param snake The snake to find the direction for 
+ * @param cell_size The size of a grid cell on the board 
+ * @param window_width The width of the playable window 
+ * @param window_height The height of the playable window
+ * @return enum direction The direction the snake should go to go on the longest possible path
+ */
 static enum direction
-get_longest_direction(float x, float y, const struct config *config)
+get_longest_direction(const struct snake *snake, int cell_size, int window_width, int window_height)
 {
-	int ix = (int)(x / config->cell_size);
-	int iy = (int)(y / config->cell_size);
-	int grid_w = (int)(config->window_width / config->cell_size);
-	int grid_h = (int)(config->window_height / config->cell_size);
+	int ix = (int)(snake->head->rect.x / cell_size);
+	int iy = (int)(snake->head->rect.y / cell_size);
+	int grid_w = (int)(window_width / cell_size);
+	int grid_h = (int)(window_height / cell_size);
 
 	if (ix == 0 && iy > 0)
 	{
@@ -80,8 +89,7 @@ get_longest_direction(float x, float y, const struct config *config)
  * Truely the future of software!
  */
 void
-get_cpu_input(struct snake *snake, const SDL_FRect *apple,
-	const struct config *config, bool *running)
+get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running, int cell_size, int window_width, int window_height)
 {
 	/* Check if user quit */
 	SDL_Event event;
@@ -91,7 +99,6 @@ get_cpu_input(struct snake *snake, const SDL_FRect *apple,
 			*running = false;
 	}
 
-	SDL_FRect *current_head = get_segment(snake, 0);
-	snake->direction = get_longest_direction(current_head->x, current_head->y,
-		config);
+	SDL_FRect *current_head = snake_get_segment(snake, 0);
+	snake->direction = get_longest_direction(snake, cell_size, window_width, window_height);
 }
