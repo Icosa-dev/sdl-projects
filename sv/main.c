@@ -60,6 +60,14 @@ print_help(void)
 	exit(0);
 }
 
+/**
+ * @brief Generate a random array of integers such that the smallest
+ * value in the array is 0 and the largest is the size of the array
+ * and that there are no repeated values.
+ * 
+ * @param arr The array to randomize
+ * @param array_size The size of the array
+ */
 static void
 generate_random_array(int arr[], int array_size)
 {
@@ -77,6 +85,9 @@ generate_random_array(int arr[], int array_size)
 	}
 }
 
+/**
+ * @brief Check if the user quit the program
+ */
 static void
 check_event(void)
 {

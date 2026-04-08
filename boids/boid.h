@@ -24,6 +24,14 @@ struct boid
 	float min_speed;
 };
 
+/**
+ * @brief Calculate the new position of a flock of boids
+ * 
+ * @param boids The boids to steer
+ * @param boids_count The amount of boids
+ * @param window_width The width of the window displaying the boids 
+ * @param window_height The hight of the window displaying the boids 
+ */
 void steer_boids(struct boid *boids, int boids_count, int window_width,
 	int window_height);
 

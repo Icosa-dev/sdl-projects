@@ -60,6 +60,13 @@ print_help(void)
 #define ALIVE true
 #define DEAD false
 
+/**
+ * @brief Allocate a 2d array of booleans to the heap
+ * 
+ * @param rows The number of rows in the array 
+ * @param columns The number of columns in the array 
+ * @return A 2d array of booleans as a pointer-pointer
+ */
 static bool **
 alloc_grid(int rows, int columns)
 {
@@ -73,6 +80,12 @@ alloc_grid(int rows, int columns)
 	return grid;
 }
 
+/**
+ * @brief Free the memory for a grid of booleans
+ * 
+ * @param grid The grid to free
+ * @param rows The amount of rows in the grid
+ */
 static void
 free_grid(bool **grid, int rows)
 {
@@ -80,6 +93,16 @@ free_grid(bool **grid, int rows)
 	free(grid);
 }
 
+/**
+ * @brief Count the number of alive neighbors relative to a point on the grid
+ * 
+ * @param grid The grid to check
+ * @param rows The amount of rows in the grid 
+ * @param columns The amount of columns in the grid
+ * @param r The row of the point to check neighbors for
+ * @param c The column of the point to check neighbors for 
+ * @return int The number of alive neighbors relative to point [r][c] 
+ */
 static int
 count_neighbors(bool **grid, int rows, int columns, int r, int c)
 {
@@ -106,6 +129,13 @@ count_neighbors(bool **grid, int rows, int columns, int r, int c)
 	return count;
 }
 
+/**
+ * @brief Update a grid according to the rules of Conway's Game of Life
+ * 
+ * @param grid The grid to update
+ * @param rows The amount of rows in the grid 
+ * @param columns The amount of columns in the grid
+ */
 static void
 update_grid(bool **grid, int rows, int columns)
 {
@@ -154,6 +184,13 @@ update_grid(bool **grid, int rows, int columns)
 	free_grid(tmp, rows);
 }
 
+/**
+ * @brief Generate random values for a grid
+ * 
+ * @param grid The grid to randomize 
+ * @param rows The amount of rows in the grid 
+ * @param columns The amount of columns in the grid
+ */
 static void
 generate_random_grid(bool **grid, int rows, int columns)
 {

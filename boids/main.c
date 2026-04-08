@@ -78,12 +78,23 @@ print_help(void)
 	exit(0);
 }
 
+/**
+ * @brief Get a random position value
+ * 
+ * @param max The max possible position 
+ * @return float A random position 
+ */
 static float
 get_rand_pos(int max)
 {
 	return SDL_randf() * max;
 }
 
+/**
+ * @brief Get a random velocity value
+ * 
+ * @return float A random velocity
+ */
 static float
 get_rand_vel()
 {
