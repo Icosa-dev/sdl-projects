@@ -13,8 +13,8 @@
 
 #include "sort.h"
 
-#define PROGRAM_NAME "snake"
-#define DESCRIPTION "A basic snake game implementation in SDL3"
+#define PROGRAM_NAME "sv"
+#define DESCRIPTION "A basic sorting algorithm visualizer implemented in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
 #define MIT_LICENSE_TEXT                                                                \
