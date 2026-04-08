@@ -7,5 +7,5 @@ CPMAddPackage("gh:libsdl-org/SDL#release-3.4.2")
 
 add_subdirectory("snake")
 # add_subdirectory("cgl")
-# add_subdirectory("sv")
+add_subdirectory("sv")
 # add_subdirectory("boids")
