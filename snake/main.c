@@ -124,10 +124,6 @@ main(int argc, char **argv)
 	int cell_size = 25;
 	int rows = 20;
 	int columns = 20;
-	int snake_max_size = rows * columns;
-
-	int window_width = columns * cell_size;
-	int window_height = rows * cell_size;
 
 	struct keybinds keybinds = WASD;
 
@@ -176,6 +172,11 @@ main(int argc, char **argv)
 			}
 		}
 	}
+
+	int snake_max_size = rows * columns;
+
+	int window_width = columns * cell_size;
+	int window_height = rows * cell_size;
 
 	/* Game logic */
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
