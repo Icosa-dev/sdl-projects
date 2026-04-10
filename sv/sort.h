@@ -80,8 +80,8 @@ extern void insertion_sort(SDL_Renderer *renderer, int array[], int array_size,
  * @param delay How many milliseconds to delay after displaying
  */
 extern void quicksort(SDL_Renderer *renderer, int array[], int array_size,
-	int low, int high, int column_width, int window_width, int window_height,
-	int delay);
+	int low, int high, int column_width, int window_width,
+	int window_height, int delay);
 
 enum algorithm
 {

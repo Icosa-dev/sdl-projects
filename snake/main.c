@@ -18,7 +18,7 @@
 #define DESCRIPTION "A basic snake game implementation in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
-#define MIT_LICENSE_TEXT                                                                \
+#define MIT_LICENSE_TEXT                                                                    \
 	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
@@ -54,15 +54,11 @@ print_help(void)
 	printf("\t-h, --help\t\t\t\t\tPrint this message and exit\n");
 	printf("\t-v, --version\t\t\t\t\tPrint version message and exit\n");
 	printf("\t--cpu-enabled\t\t\t\t\tEnable CPU to play the game\n");
-	printf(
-		"\t--cell-size <int>\t\t\t\tSet the number of pixels per board cell\n");
+	printf("\t--cell-size <int>\t\t\t\tSet the number of pixels per board cell\n");
 	printf("\t--rows <int>\t\t\t\t\tSet the total number of board rows\n");
-	printf(
-		"\t--columns <int>\t\t\t\t\tSet the total number of board columns\n");
-	printf(
-		"\t--keybinds <wasd, arrows>\t\t\tSet which keybinds should be used\n");
-	printf(
-		"\t--delay <int>\t\t\t\t\tSet the delay of the program in milliseconds\n");
+	printf("\t--columns <int>\t\t\t\t\tSet the total number of board columns\n");
+	printf("\t--keybinds <wasd, arrows>\t\t\tSet which keybinds should be used\n");
+	printf("\t--delay <int>\t\t\t\t\tSet the delay of the program in milliseconds\n");
 	exit(0);
 }
 
@@ -122,13 +118,13 @@ main(int argc, char **argv)
 {
 	/* Default game values */
 	int cell_size = 25;
-	int rows	  = 20;
-	int columns	  = 20;
+	int rows      = 20;
+	int columns   = 20;
 
 	struct keybinds keybinds = WASD;
 
 	bool cpu_enabled = false;
-	int	 delay		 = 50;
+	int  delay	 = 50;
 
 	/* Argument parsing */
 	if (argc > 1)
@@ -160,7 +156,7 @@ main(int argc, char **argv)
 				{
 					if (STREQ(value, "arrows"))
 					{
-						keybinds.up	   = SDLK_UP;
+						keybinds.up    = SDLK_UP;
 						keybinds.down  = SDLK_DOWN;
 						keybinds.left  = SDLK_LEFT;
 						keybinds.right = SDLK_RIGHT;
@@ -181,13 +177,13 @@ main(int argc, char **argv)
 	/* Game logic */
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
-	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
-			window_height, 0);
+	SDL_Window   *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-	struct snake *snake	   = snake_init();
-	float		  center_x = (float)window_width / 2;
-	float		  center_y = (float)window_height / 2;
+	struct snake *snake    = snake_init();
+	float	      center_x = (float)window_width / 2;
+	float	      center_y = (float)window_height / 2;
 	snake_push_front(snake,
 		(SDL_FRect) { center_x, center_y, cell_size, cell_size });
 
@@ -200,8 +196,8 @@ main(int argc, char **argv)
 	{
 		/* Input handling */
 		if (cpu_enabled)
-			get_cpu_input(snake, &apple, &running, cell_size, window_height,
-				window_width);
+			get_cpu_input(snake, &apple, &running, cell_size,
+				window_height, window_width);
 		else
 			get_user_input(snake, &keybinds, &running);
 
@@ -232,20 +228,22 @@ main(int argc, char **argv)
 		}
 
 		/* Snake-border collision detection */
-		if (new_head.x < 0 || new_head.x == window_width || new_head.y < 0 ||
-			new_head.y == window_height)
+		if (new_head.x < 0 || new_head.x == window_width ||
+			new_head.y < 0 || new_head.y == window_height)
 			freeze_screen();
 
 		/* Update snake body */
 		snake_push_front(snake, new_head);
 		if (!ate_apple)
-			snake_pop_back(snake); /* remove back segment if not growing */
+			snake_pop_back(
+				snake); /* remove back segment if not growing */
 
 		/* Snake-snake collision detection */
 		for (int i = 1; i < snake->size; i++)
 		{
 			SDL_FRect *segment = snake_get_segment(snake, i);
-			if (new_head.x == segment->x && new_head.y == segment->y)
+			if (new_head.x == segment->x &&
+				new_head.y == segment->y)
 				freeze_screen();
 		}
 
@@ -264,7 +262,8 @@ main(int argc, char **argv)
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
 		for (int i = 0; i < snake->size; i++)
 		{
-			SDL_RenderFillRect(renderer, snake_get_segment(snake, i));
+			SDL_RenderFillRect(renderer,
+				snake_get_segment(snake, i));
 		}
 
 		/* Present renderer */

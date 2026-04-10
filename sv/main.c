@@ -17,7 +17,7 @@
 #define DESCRIPTION "A basic sorting algorithm visualizer implemented in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
-#define MIT_LICENSE_TEXT                                                                \
+#define MIT_LICENSE_TEXT                                                                    \
 	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
@@ -143,15 +143,15 @@ main(int argc, char **argv)
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
-			window_height, 0);
+	SDL_Window   *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
 
 	int array[array_size];
 	generate_random_array(array, array_size);
 
 	bool running = true;
-	bool sorted	 = false;
+	bool sorted  = false;
 	while (running)
 	{
 		check_event();
@@ -161,27 +161,31 @@ main(int argc, char **argv)
 			switch (algorithm)
 			{
 			case BUBBLE:
-				bubble_sort(renderer, array, array_size, column_width,
-					window_width, window_height, delay);
+				bubble_sort(renderer, array, array_size,
+					column_width, window_width,
+					window_height, delay);
 				break;
 			case SELECTION:
-				selection_sort(renderer, array, array_size, column_width,
-					window_width, window_height, delay);
+				selection_sort(renderer, array, array_size,
+					column_width, window_width,
+					window_height, delay);
 				break;
 			case INSERTION:
-				insertion_sort(renderer, array, array_size, column_width,
-					window_width, window_height, delay);
+				insertion_sort(renderer, array, array_size,
+					column_width, window_width,
+					window_height, delay);
 				break;
 			case QUICK:
-				quicksort(renderer, array, array_size, 0, array_size,
-					column_width, window_width, window_height, delay);
+				quicksort(renderer, array, array_size, 0,
+					array_size, column_width, window_width,
+					window_height, delay);
 				break;
 			}
 			sorted = true;
 		}
 
-		display_array(renderer, array, array_size, column_width, window_height,
-			window_height, delay, sorted);
+		display_array(renderer, array, array_size, column_width,
+			window_height, window_height, delay, sorted);
 	}
 
 	SDL_DestroyRenderer(renderer);

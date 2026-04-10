@@ -12,10 +12,10 @@ struct snake *
 snake_init()
 {
 	struct snake *snake = malloc(sizeof(struct snake));
-	snake->head			= NULL;
-	snake->tail			= NULL;
-	snake->size			= 0;
-	snake->direction	= UP;
+	snake->head	    = NULL;
+	snake->tail	    = NULL;
+	snake->size	    = 0;
+	snake->direction    = UP;
 
 	return snake;
 }
@@ -24,9 +24,9 @@ void
 snake_push_front(struct snake *snake, SDL_FRect rect)
 {
 	struct snake_node *new_node = malloc(sizeof(struct snake_node));
-	new_node->rect				= rect;
-	new_node->next				= snake->head;
-	new_node->prev				= NULL;
+	new_node->rect		    = rect;
+	new_node->next		    = snake->head;
+	new_node->prev		    = NULL;
 
 	if (snake->head != NULL)
 		snake->head->prev = new_node;
@@ -57,7 +57,7 @@ snake_pop_back(struct snake *snake)
 			current = current->next;
 
 		free(snake->tail);
-		snake->tail		  = current;
+		snake->tail	  = current;
 		snake->tail->next = NULL;
 	}
 

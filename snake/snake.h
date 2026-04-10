@@ -19,7 +19,7 @@ enum direction
 
 struct snake_node
 {
-	SDL_FRect		   rect;
+	SDL_FRect	   rect;
 	struct snake_node *prev;
 	struct snake_node *next;
 };
@@ -28,7 +28,7 @@ struct snake
 {
 	struct snake_node *head;
 	struct snake_node *tail;
-	int				   size;
+	int		   size;
 	enum direction	   direction;
 };
 

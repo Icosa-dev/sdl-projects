@@ -26,11 +26,14 @@ get_user_input(struct snake *snake, const struct keybinds *keybinds,
 
 			if (key == keybinds->up && snake->direction != DOWN)
 				snake->direction = UP;
-			else if (key == keybinds->down && snake->direction != UP)
+			else if (key == keybinds->down &&
+				snake->direction != UP)
 				snake->direction = DOWN;
-			else if (key == keybinds->left && snake->direction != RIGHT)
+			else if (key == keybinds->left &&
+				snake->direction != RIGHT)
 				snake->direction = LEFT;
-			else if (key == keybinds->right && snake->direction != LEFT)
+			else if (key == keybinds->right &&
+				snake->direction != LEFT)
 				snake->direction = RIGHT;
 		}
 	}

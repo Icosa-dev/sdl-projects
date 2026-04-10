@@ -20,7 +20,7 @@
 	"A basic implementation of the boids swarm intelligence program in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
-#define MIT_LICENSE_TEXT                                                                \
+#define MIT_LICENSE_TEXT                                                                    \
 	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
@@ -55,34 +55,26 @@ print_help(void)
 	printf("Options:\n");
 	printf("\t-h, --help\t\t\tPrint this help message and exit\n");
 	printf("\t-v, --version\t\t\tPrint the version message and exit\n");
-	printf(
-		"\t--profile [birds, fish, insects]\n\t\t\t\t\tSet default values to reflect a kind of animal\n");
+	printf("\t--profile [birds, fish, insects]\n\t\t\t\t\tSet default values to reflect a kind of animal\n");
 	printf("\t--boid-count <int>\t\tSet the number of boids to simulate\n");
 	printf("\t--boid-size <int>\t\tSet the size of each boid in pixels\n");
-	printf(
-		"\t--separation <int> \t\tSet the amount each boid should steer to avoid a flockmate\n");
-	printf(
-		"\t--alignment <int> \t\tSet the amount each boid should steer towards the average direction of the flock\n");
-	printf(
-		"\t--cohesion <int> \t\tSet the amount each boid should steer towards the center of the flock\n");
-	printf(
-		"\t--protected-range <int>\t\tSet the distance at which the boid should avoid other boids\n");
-	printf(
-		"\t--visual-range <int>\t\tSet the distance at which a boid can be affected by other boids\n");
-	printf(
-		"\t--edge-avoidance <int>\t\tSet the amount each boid should avoid the edge of the screen\n");
+	printf("\t--separation <int> \t\tSet the amount each boid should steer to avoid a flockmate\n");
+	printf("\t--alignment <int> \t\tSet the amount each boid should steer towards the average direction of the flock\n");
+	printf("\t--cohesion <int> \t\tSet the amount each boid should steer towards the center of the flock\n");
+	printf("\t--protected-range <int>\t\tSet the distance at which the boid should avoid other boids\n");
+	printf("\t--visual-range <int>\t\tSet the distance at which a boid can be affected by other boids\n");
+	printf("\t--edge-avoidance <int>\t\tSet the amount each boid should avoid the edge of the screen\n");
 	printf("\t--max-speed\t\t\tSet the max speed of the boids\n");
 	printf("\t--min-speed\t\t\tSet the min speed of the boids\n");
-	printf(
-		"\t--edge-margin\t\t\tSet the distance from the edge of the screen at which boids should steer away\n");
+	printf("\t--edge-margin\t\t\tSet the distance from the edge of the screen at which boids should steer away\n");
 	exit(0);
 }
 
 /**
  * @brief Get a random position value
- * 
- * @param max The max possible position 
- * @return float A random position 
+ *
+ * @param max The max possible position
+ * @return float A random position
  */
 static float
 get_rand_pos(int max)
@@ -92,7 +84,7 @@ get_rand_pos(int max)
 
 /**
  * @brief Get a random velocity value
- * 
+ *
  * @return float A random velocity
  */
 static float
@@ -104,20 +96,20 @@ get_rand_vel()
 int
 main(int argc, char **argv)
 {
-	const int window_width = 1000;
+	const int window_width	= 1000;
 	const int window_height = 1000;
 
-	int boid_count = 500;
-	int boid_size = 5;
-	float separation_factor = 0.05;
-	float alignment_factor = 0.05;
-	float cohesion_factor = 0.0005;
-	int protected_range = 8;
-	int visual_range = 40;
+	int   boid_count	    = 500;
+	int   boid_size		    = 5;
+	float separation_factor	    = 0.05;
+	float alignment_factor	    = 0.05;
+	float cohesion_factor	    = 0.0005;
+	int   protected_range	    = 8;
+	int   visual_range	    = 40;
 	float edge_avoidance_factor = 0.2;
-	float max_speed = 4;
-	float min_speed = 2;
-	int edge_margin = 50;
+	float max_speed		    = 4;
+	float min_speed		    = 2;
+	int   edge_margin	    = 50;
 
 	int delay = 16;
 
@@ -141,19 +133,21 @@ main(int argc, char **argv)
 				{
 					if (STREQ(value, "fish"))
 					{
-						/* Values for fish school simulation */
-						visual_range = 75;
-						cohesion_factor = 0.005;
+						/* Values for fish school
+						 * simulation */
+						visual_range	 = 75;
+						cohesion_factor	 = 0.005;
 						alignment_factor = 0.1;
-						protected_range = 12;
+						protected_range	 = 12;
 					} else if (STREQ(value, "insects"))
 					{
-						/* Values for insect swarm simulation */
-						visual_range = 15;
-						max_speed = 5;
-						min_speed = 4;
+						/* Values for insect swarm
+						 * simulation */
+						visual_range	  = 15;
+						max_speed	  = 5;
+						min_speed	  = 4;
 						separation_factor = 0.2;
-						alignment_factor = 0.01;
+						alignment_factor  = 0.01;
 					}
 				} else if (STREQ(arg, "--boid-size"))
 					boid_size = atoi(value);
@@ -183,8 +177,8 @@ main(int argc, char **argv)
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window *window = SDL_CreateWindow(PROGRAM_NAME, window_width,
-		window_height, 0);
+	SDL_Window   *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
 	struct boid boids[boid_count];
@@ -193,12 +187,12 @@ main(int argc, char **argv)
 		SDL_FRect body = (SDL_FRect) { get_rand_pos(window_width),
 			get_rand_pos(window_height), boid_size, boid_size };
 		boids[i] = (struct boid) { body, get_rand_vel(), get_rand_vel(),
-			protected_range, visual_range, edge_margin, separation_factor,
-			alignment_factor, cohesion_factor, edge_avoidance_factor, max_speed,
-			min_speed };
+			protected_range, visual_range, edge_margin,
+			separation_factor, alignment_factor, cohesion_factor,
+			edge_avoidance_factor, max_speed, min_speed };
 	}
 
-	bool running = true;
+	bool	  running = true;
 	SDL_Event event;
 	while (running)
 	{

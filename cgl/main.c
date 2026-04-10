@@ -14,7 +14,7 @@
 #define DESCRIPTION "A basic implementation of Conway's Game of Life in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
-#define MIT_LICENSE_TEXT                                                                \
+#define MIT_LICENSE_TEXT                                                                    \
 	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
@@ -145,25 +145,29 @@ update_grid(bool **grid, int rows, int columns)
 	{
 		for (int c = 0; c < columns; c++)
 		{
-			int	 count		  = count_neighbors(grid, rows, columns, r, c);
+			int  count = count_neighbors(grid, rows, columns, r, c);
 			bool current_cell = grid[r][c];
 
 			/*
 			 * RULES:
-			 * 1) Death by Underpopulation: If the current cell is alive but has
-			 * less than 2 alive neighbors it dies as if by underpopulation.
+			 * 1) Death by Underpopulation: If the current cell is
+			 * alive but has less than 2 alive neighbors it dies as
+			 * if by underpopulation.
 			 *
-			 * 2) Death by Overpopulation: If the current cell is alive but has
-			 * more than 3 alive neighbors it dies as if by overpopulation.
+			 * 2) Death by Overpopulation: If the current cell is
+			 * alive but has more than 3 alive neighbors it dies as
+			 * if by overpopulation.
 			 *
-			 * 3) Reproduction: If the current cell is alive and has exactly 3
-			 * alive neighbors it becomes alive as if by reproduction.
+			 * 3) Reproduction: If the current cell is alive and has
+			 * exactly 3 alive neighbors it becomes alive as if by
+			 * reproduction.
 			 *
-			 * 4) Survival: If none of the above are met the state of the cell
-			 * persists.
+			 * 4) Survival: If none of the above are met the state
+			 * of the cell persists.
 			 */
 			if (current_cell == ALIVE && count < 2)
-				tmp[r][c] = false; /* death by underpopulation */
+				tmp[r][c] =
+					false; /* death by underpopulation */
 			else if (current_cell == ALIVE && count > 3)
 				tmp[r][c] = false; /* death by overpopulation */
 			else if (current_cell == DEAD && count == 3)
@@ -209,8 +213,8 @@ int
 main(int argc, char **argv)
 {
 	int cell_size = 5;
-	int rows	  = 200;
-	int columns	  = 200;
+	int rows      = 200;
+	int columns   = 200;
 
 	int delay = 25;
 
@@ -246,8 +250,8 @@ main(int argc, char **argv)
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
-			window_height, 0);
+	SDL_Window   *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
 	bool **grid = alloc_grid(rows, columns);
@@ -279,7 +283,8 @@ main(int argc, char **argv)
 				if (grid[r][c] == ALIVE)
 				{
 					SDL_RenderFillRect(renderer,
-						&(SDL_FRect) { x, y, cell_size, cell_size });
+						&(SDL_FRect) { x, y, cell_size,
+							cell_size });
 				}
 			}
 		}

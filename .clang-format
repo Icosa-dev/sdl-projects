@@ -104,9 +104,9 @@ IndentPPDirectives: None
 Language: Cpp
 NamespaceIndentation: None
 PointerAlignment: Right
-ContinuationIndentWidth: 4
-IndentWidth: 4
-TabWidth: 4
+ContinuationIndentWidth: 8
+IndentWidth: 8
+TabWidth: 8
 ColumnLimit: 80
 UseTab: Always
 SpaceAfterCStyleCast: false

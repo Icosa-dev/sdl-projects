@@ -14,14 +14,14 @@ struct keybinds
 	SDL_Keycode up, down, left, right;
 };
 
-#define WASD                           \
-	(struct keybinds)                  \
-	{                                  \
+#define WASD                                   \
+	(struct keybinds)                      \
+	{                                      \
 		SDLK_W, SDLK_S, SDLK_A, SDLK_D \
 	}
-#define ARROWS                                    \
-	(struct keybinds)                             \
-	{                                             \
+#define ARROWS                                            \
+	(struct keybinds)                                 \
+	{                                                 \
 		SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT \
 	}
 

@@ -47,9 +47,9 @@ static void
 calculate_alignment(struct boid *boid, int idx, const struct boid *boids,
 	int boids_count)
 {
-	float xvel_avg = 0;
-	float yvel_avg = 0;
-	int neighboring_boids = 0;
+	float xvel_avg		= 0;
+	float yvel_avg		= 0;
+	int   neighboring_boids = 0;
 
 	for (int i = 0; i < boids_count; i++)
 	{
@@ -80,9 +80,9 @@ static void
 calculate_cohesion(struct boid *boid, int idx, const struct boid *boids,
 	int boids_count)
 {
-	float xpos_avg = 0;
-	float ypos_avg = 0;
-	int neighboring_boids = 0;
+	float xpos_avg		= 0;
+	float ypos_avg		= 0;
+	int   neighboring_boids = 0;
 
 	for (int i = 0; i < boids_count; i++)
 	{
@@ -112,9 +112,9 @@ calculate_cohesion(struct boid *boid, int idx, const struct boid *boids,
 static void
 calculate_edge_avoidance(struct boid *boid, int window_width, int window_height)
 {
-	float left_margin = boid->edge_margin;
-	float right_margin = window_width - boid->edge_margin;
-	float top_margin = boid->edge_margin;
+	float left_margin   = boid->edge_margin;
+	float right_margin  = window_width - boid->edge_margin;
+	float top_margin    = boid->edge_margin;
 	float bottom_margin = window_height - boid->edge_margin;
 
 	if (boid->body.x < left_margin)
