@@ -181,7 +181,7 @@ main(int argc, char **argv)
 		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-	struct boid boids[boid_count];
+	struct boid *boids = (struct boid *)malloc(boid_count * sizeof(struct boid));
 	for (int i = 0; i < boid_count; i++)
 	{
 		SDL_FRect body = (SDL_FRect) { get_rand_pos(window_width),
@@ -217,6 +217,7 @@ main(int argc, char **argv)
 		SDL_Delay(delay);
 	}
 
+	free(boids);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

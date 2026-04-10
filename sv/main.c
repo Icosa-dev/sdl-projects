@@ -147,7 +147,7 @@ main(int argc, char **argv)
 		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
 
-	int array[array_size];
+	int *array = (int *)malloc(array_size * sizeof(int));
 	generate_random_array(array, array_size);
 
 	bool running = true;
@@ -188,6 +188,7 @@ main(int argc, char **argv)
 			window_height, window_height, delay, sorted);
 	}
 
+	free(array);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
