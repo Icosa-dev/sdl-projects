@@ -29,23 +29,25 @@ struct snake;
 
 /**
  * @brief Get the user input object
- * 
- * @param snake 
- * @param keybinds 
- * @param running 
+ *
+ * @param snake
+ * @param keybinds
+ * @param running
  */
-extern void get_user_input(struct snake *snake, const struct keybinds *keybinds, bool *running);
+extern void get_user_input(struct snake *snake, const struct keybinds *keybinds,
+	bool *running);
 
 /**
  * @brief Get the cpu input object
- * 
- * @param snake 
- * @param apple 
- * @param running 
- * @param cell_size 
- * @param window_width 
- * @param window_height 
+ *
+ * @param snake
+ * @param apple
+ * @param running
+ * @param cell_size
+ * @param window_width
+ * @param window_height
  */
-extern void get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running, int cell_size, int window_width, int window_height);
+extern void get_cpu_input(struct snake *snake, const SDL_FRect *apple,
+	bool *running, int cell_size, int window_width, int window_height);
 
 #endif

@@ -19,7 +19,7 @@
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
 #define MIT_LICENSE_TEXT                                                                \
-	"Copyright (c) " __DATE__  " " AUTHORS "\n\n"                                       \
+	"Copyright (c) " __DATE__ " " AUTHORS "\n\n"                                        \
 	"Permission is hereby granted, free of charge, to any person obtaining a copy\n"    \
 	"of this software and associated documentation files (the \"Software\"), to deal\n" \
 	"in the Software without restriction, including without limitation the rights\n"    \
@@ -122,13 +122,13 @@ main(int argc, char **argv)
 {
 	/* Default game values */
 	int cell_size = 25;
-	int rows = 20;
-	int columns = 20;
+	int rows	  = 20;
+	int columns	  = 20;
 
 	struct keybinds keybinds = WASD;
 
 	bool cpu_enabled = false;
-	int delay = 50;
+	int	 delay		 = 50;
 
 	/* Argument parsing */
 	if (argc > 1)
@@ -160,9 +160,9 @@ main(int argc, char **argv)
 				{
 					if (STREQ(value, "arrows"))
 					{
-						keybinds.up = SDLK_UP;
-						keybinds.down = SDLK_DOWN;
-						keybinds.left = SDLK_LEFT;
+						keybinds.up	   = SDLK_UP;
+						keybinds.down  = SDLK_DOWN;
+						keybinds.left  = SDLK_LEFT;
 						keybinds.right = SDLK_RIGHT;
 					}
 				} else if (STREQ(arg, "--delay"))
@@ -175,26 +175,26 @@ main(int argc, char **argv)
 
 	int snake_max_size = rows * columns;
 
-	int window_width = columns * cell_size;
+	int window_width  = columns * cell_size;
 	int window_height = rows * cell_size;
 
 	/* Game logic */
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
-	SDL_Window *window = SDL_CreateWindow(PROGRAM_NAME, window_width,
-		window_height, 0);
+	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+			window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-	struct snake *snake = snake_init();
-	float center_x = (float)window_width / 2;
-	float center_y = (float)window_height / 2;
+	struct snake *snake	   = snake_init();
+	float		  center_x = (float)window_width / 2;
+	float		  center_y = (float)window_height / 2;
 	snake_push_front(snake,
 		(SDL_FRect) { center_x, center_y, cell_size, cell_size });
 
 	SDL_FRect apple = (SDL_FRect) { 0, 0, cell_size, cell_size };
 	get_rand_pos(&apple, snake, cell_size, rows, columns);
 
-	bool running = true;
+	bool	  running = true;
 	SDL_Event event;
 	while (running)
 	{

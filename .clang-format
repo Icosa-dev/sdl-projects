@@ -3,8 +3,8 @@
 ---
 BasedOnStyle: WebKit
 AlignAfterOpenBracket: DontAlign
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
 AlignEscapedNewlines: Left
 AlignOperands: false
 AlignTrailingComments: true

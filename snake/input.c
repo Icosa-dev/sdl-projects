@@ -5,11 +5,13 @@
  */
 
 #include <SDL3/SDL.h>
+
 #include "input.h"
 #include "snake.h"
 
 void
-get_user_input(struct snake *snake, const struct keybinds *keybinds, bool *running)
+get_user_input(struct snake *snake, const struct keybinds *keybinds,
+	bool *running)
 {
 	SDL_Event event;
 
@@ -37,17 +39,19 @@ get_user_input(struct snake *snake, const struct keybinds *keybinds, bool *runni
 /**
  * @brief Get the direction which would create the longest path for the snake
  *
- * @param snake The snake to find the direction for 
- * @param cell_size The size of a grid cell on the board 
- * @param window_width The width of the playable window 
+ * @param snake The snake to find the direction for
+ * @param cell_size The size of a grid cell on the board
+ * @param window_width The width of the playable window
  * @param window_height The height of the playable window
- * @return enum direction The direction the snake should go to go on the longest possible path
+ * @return enum direction The direction the snake should go to go on the longest
+ * possible path
  */
 static enum direction
-get_longest_direction(const struct snake *snake, int cell_size, int window_width, int window_height)
+get_longest_direction(const struct snake *snake, int cell_size,
+	int window_width, int window_height)
 {
-	int ix = (int)(snake->head->rect.x / cell_size);
-	int iy = (int)(snake->head->rect.y / cell_size);
+	int ix	   = (int)(snake->head->rect.x / cell_size);
+	int iy	   = (int)(snake->head->rect.y / cell_size);
 	int grid_w = (int)(window_width / cell_size);
 	int grid_h = (int)(window_height / cell_size);
 
@@ -89,7 +93,8 @@ get_longest_direction(const struct snake *snake, int cell_size, int window_width
  * Truely the future of software!
  */
 void
-get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running, int cell_size, int window_width, int window_height)
+get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running,
+	int cell_size, int window_width, int window_height)
 {
 	/* Check if user quit */
 	SDL_Event event;
@@ -100,5 +105,6 @@ get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running, int ce
 	}
 
 	SDL_FRect *current_head = snake_get_segment(snake, 0);
-	snake->direction = get_longest_direction(snake, cell_size, window_width, window_height);
+	snake->direction = get_longest_direction(snake, cell_size, window_width,
+		window_height);
 }

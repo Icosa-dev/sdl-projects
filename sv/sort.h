@@ -12,7 +12,7 @@ typedef struct SDL_Renderer SDL_Renderer;
 
 /**
  * @brief Display an array as a bar graph
- * 
+ *
  * @param renderer The renderer to draw the graph too
  * @param array The underlying data as an array
  * @param array_size The size of the array
@@ -28,7 +28,7 @@ extern void display_array(SDL_Renderer *renderer, int array[], int array_size,
 
 /**
  * @brief Sort and display an array using the bubble sort algorithm
- * 
+ *
  * @param renderer The renderer to draw the graph too
  * @param array The underlying data as an array
  * @param array_size The size of the array
@@ -42,7 +42,7 @@ extern void bubble_sort(SDL_Renderer *renderer, int array[], int array_size,
 
 /**
  * @brief Sort and display an array using the selection sort algorithm
- * 
+ *
  * @param renderer The renderer to draw the graph too
  * @param array The underlying data as an array
  * @param array_size The size of the array
@@ -56,7 +56,7 @@ extern void selection_sort(SDL_Renderer *renderer, int array[], int array_size,
 
 /**
  * @brief Sort and display an array using the insertion sort algorithm
- * 
+ *
  * @param renderer The renderer to draw the graph too
  * @param array The underlying data as an array
  * @param array_size The size of the array
@@ -70,7 +70,7 @@ extern void insertion_sort(SDL_Renderer *renderer, int array[], int array_size,
 
 /**
  * @brief Sort and display an array using the quicksort algorithm
- * 
+ *
  * @param renderer The renderer to draw the graph too
  * @param array The underlying data as an array
  * @param array_size The size of the array

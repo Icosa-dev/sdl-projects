@@ -64,7 +64,7 @@ print_help(void)
  * @brief Generate a random array of integers such that the smallest
  * value in the array is 0 and the largest is the size of the array
  * and that there are no repeated values.
- * 
+ *
  * @param arr The array to randomize
  * @param array_size The size of the array
  */
@@ -78,10 +78,10 @@ generate_random_array(int arr[], int array_size)
 
 	for (int i = array_size - 1; i > 0; i--)
 	{
-		int j = rand() % (i + 1);
+		int j	 = rand() % (i + 1);
 		int temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
+		arr[i]	 = arr[j];
+		arr[j]	 = temp;
 	}
 }
 
@@ -104,7 +104,7 @@ int
 main(int argc, char **argv)
 {
 	const int column_width = 5;
-	const int array_size = 201;
+	const int array_size   = 201;
 
 	int delay = 25;
 
@@ -138,20 +138,20 @@ main(int argc, char **argv)
 		}
 	}
 
-	const int window_width = array_size * column_width;
+	const int window_width	= array_size * column_width;
 	const int window_height = window_width;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window *window = SDL_CreateWindow(PROGRAM_NAME, window_width,
-		window_height, 0);
+	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+			window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
 
 	int array[array_size];
 	generate_random_array(array, array_size);
 
 	bool running = true;
-	bool sorted = false;
+	bool sorted	 = false;
 	while (running)
 	{
 		check_event();

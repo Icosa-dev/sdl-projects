@@ -5,14 +5,13 @@
  */
 
 #include <SDL3/SDL.h>
+#include <color.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <color.h>
 
 #define PROGRAM_NAME "cgl"
-#define DESCRIPTION \
-	"A basic implementation of Conway's Game of Life in SDL3"
+#define DESCRIPTION "A basic implementation of Conway's Game of Life in SDL3"
 #define AUTHORS "LJC"
 #define VERSION "v0.1.0"
 #define MIT_LICENSE_TEXT                                                                \
@@ -62,9 +61,9 @@ print_help(void)
 
 /**
  * @brief Allocate a 2d array of booleans to the heap
- * 
- * @param rows The number of rows in the array 
- * @param columns The number of columns in the array 
+ *
+ * @param rows The number of rows in the array
+ * @param columns The number of columns in the array
  * @return A 2d array of booleans as a pointer-pointer
  */
 static bool **
@@ -82,26 +81,27 @@ alloc_grid(int rows, int columns)
 
 /**
  * @brief Free the memory for a grid of booleans
- * 
+ *
  * @param grid The grid to free
  * @param rows The amount of rows in the grid
  */
 static void
 free_grid(bool **grid, int rows)
 {
-	for (int i = 0; i < rows; i++) free(grid[i]);
+	for (int i = 0; i < rows; i++)
+		free(grid[i]);
 	free(grid);
 }
 
 /**
  * @brief Count the number of alive neighbors relative to a point on the grid
- * 
+ *
  * @param grid The grid to check
- * @param rows The amount of rows in the grid 
+ * @param rows The amount of rows in the grid
  * @param columns The amount of columns in the grid
  * @param r The row of the point to check neighbors for
- * @param c The column of the point to check neighbors for 
- * @return int The number of alive neighbors relative to point [r][c] 
+ * @param c The column of the point to check neighbors for
+ * @return int The number of alive neighbors relative to point [r][c]
  */
 static int
 count_neighbors(bool **grid, int rows, int columns, int r, int c)
@@ -131,9 +131,9 @@ count_neighbors(bool **grid, int rows, int columns, int r, int c)
 
 /**
  * @brief Update a grid according to the rules of Conway's Game of Life
- * 
+ *
  * @param grid The grid to update
- * @param rows The amount of rows in the grid 
+ * @param rows The amount of rows in the grid
  * @param columns The amount of columns in the grid
  */
 static void
@@ -145,7 +145,7 @@ update_grid(bool **grid, int rows, int columns)
 	{
 		for (int c = 0; c < columns; c++)
 		{
-			int count = count_neighbors(grid, rows, columns, r, c);
+			int	 count		  = count_neighbors(grid, rows, columns, r, c);
 			bool current_cell = grid[r][c];
 
 			/*
@@ -186,9 +186,9 @@ update_grid(bool **grid, int rows, int columns)
 
 /**
  * @brief Generate random values for a grid
- * 
- * @param grid The grid to randomize 
- * @param rows The amount of rows in the grid 
+ *
+ * @param grid The grid to randomize
+ * @param rows The amount of rows in the grid
  * @param columns The amount of columns in the grid
  */
 static void
@@ -209,8 +209,8 @@ int
 main(int argc, char **argv)
 {
 	int cell_size = 5;
-	int rows = 200;
-	int columns = 200;
+	int rows	  = 200;
+	int columns	  = 200;
 
 	int delay = 25;
 
@@ -241,19 +241,19 @@ main(int argc, char **argv)
 		}
 	}
 
-	int window_width = rows * cell_size;
+	int window_width  = rows * cell_size;
 	int window_height = columns * cell_size;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window *window = SDL_CreateWindow(PROGRAM_NAME, window_width,
-		window_height, 0);
+	SDL_Window	 *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
+			window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
 	bool **grid = alloc_grid(rows, columns);
 	generate_random_grid(grid, rows, columns);
 
-	bool running = true;
+	bool	  running = true;
 	SDL_Event event;
 	while (running)
 	{
