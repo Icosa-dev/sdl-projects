@@ -181,15 +181,24 @@ main(int argc, char **argv)
 		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
 
-	struct boid *boids = (struct boid *)malloc(boid_count * sizeof(struct boid));
+	struct boid *boids = (struct boid *)malloc(
+		boid_count * sizeof(struct boid));
 	for (int i = 0; i < boid_count; i++)
 	{
 		SDL_FRect body = (SDL_FRect) { get_rand_pos(window_width),
 			get_rand_pos(window_height), boid_size, boid_size };
-		boids[i] = (struct boid) { body, get_rand_vel(), get_rand_vel(),
-			protected_range, visual_range, edge_margin,
-			separation_factor, alignment_factor, cohesion_factor,
-			edge_avoidance_factor, max_speed, min_speed };
+		boids[i]       = (struct boid) { .body = body,
+			      .vx		       = get_rand_vel(),
+			      .vy		       = get_rand_vel(),
+			      .protected_range	       = protected_range,
+			      .visual_range	       = visual_range,
+			      .edge_margin	       = edge_margin,
+			      .separation_factor       = separation_factor,
+			      .alignment_factor	       = alignment_factor,
+			      .cohesion_factor	       = cohesion_factor,
+			      .edge_avoidance_factor   = edge_avoidance_factor,
+			      .max_speed	       = max_speed,
+			      min_speed		       = min_speed };
 	}
 
 	bool	  running = true;
