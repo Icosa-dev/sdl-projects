@@ -50,13 +50,14 @@ get_user_input(struct snake *snake, const struct keybinds *keybinds,
  * possible path
  */
 static enum direction
-get_longest_direction(const struct snake *snake, int cell_size,
-	int window_width, int window_height)
+get_longest_direction(const struct snake *snake, uint32_t cell_size,
+	uint32_t window_width, uint32_t window_height)
 {
-	int ix	   = (int)(snake->head->rect.x / cell_size);
-	int iy	   = (int)(snake->head->rect.y / cell_size);
-	int grid_w = (int)(window_width / cell_size);
-	int grid_h = (int)(window_height / cell_size);
+	uint32_t ix	   = (snake->head->rect.x / cell_size);
+	uint32_t iy	   = (snake->head->rect.y / cell_size);
+	uint32_t grid_w = (window_width / cell_size);
+	uint32_t grid_h = (window_height / cell_size);
+
 
 	if (ix == 0 && iy > 0)
 	{
@@ -96,8 +97,8 @@ get_longest_direction(const struct snake *snake, int cell_size,
  * Truely the future of software!
  */
 void
-get_cpu_input(struct snake *snake, bool *running, int cell_size,
-	int window_width, int window_height)
+get_cpu_input(struct snake *snake, bool *running, uint32_t cell_size,
+	uint32_t window_width, uint32_t window_height)
 {
 	/* Check if user quit */
 	SDL_Event event;
