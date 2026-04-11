@@ -54,9 +54,7 @@ dkms.conf
 # debug information files
 *.dwo
 
-# CMake files
+# meson files
 .cache/
 build/
-
-# temporary folder for old code
-old/
+builddir/

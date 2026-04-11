@@ -19,10 +19,8 @@ with the build system.
 ```
 git clone https://github.com/Icosa-dev/sdl-projects.git
 cd sdl-projects
-mkdir build
-cd build
-cmake ..
-make
+meson setup build
+meson compile -C build
 
 # to run a program assuming you are in the build directory
 ./<subproject-name>/<subproject-name>
