@@ -77,7 +77,7 @@ print_help(void)
  * @return float A random position
  */
 static float
-get_rand_pos(int max)
+get_rand_pos(uint32_t max)
 {
 	return SDL_randf() * max;
 }
@@ -88,7 +88,7 @@ get_rand_pos(int max)
  * @return float A random velocity
  */
 static float
-get_rand_vel()
+get_rand_vel(void)
 {
 	return SDL_randf() * 4 - 2;
 }
@@ -96,22 +96,22 @@ get_rand_vel()
 int
 main(int argc, char **argv)
 {
-	const int window_width	= 1000;
-	const int window_height = 1000;
+	const uint32_t window_width  = 1000;
+	const uint32_t window_height = 1000;
 
-	int   boid_count	    = 500;
-	int   boid_size		    = 5;
-	float separation_factor	    = 0.05;
-	float alignment_factor	    = 0.05;
-	float cohesion_factor	    = 0.0005;
-	int   protected_range	    = 8;
-	int   visual_range	    = 40;
-	float edge_avoidance_factor = 0.2;
-	float max_speed		    = 4;
-	float min_speed		    = 2;
-	int   edge_margin	    = 50;
+	size_t	 boid_count	       = 500;
+	uint32_t boid_size	       = 5;
+	float	 separation_factor     = 0.05;
+	float	 alignment_factor      = 0.05;
+	float	 cohesion_factor       = 0.0005;
+	uint32_t protected_range       = 8;
+	uint32_t visual_range	       = 40;
+	float	 edge_avoidance_factor = 0.2;
+	float	 max_speed	       = 4;
+	float	 min_speed	       = 2;
+	uint32_t edge_margin	       = 50;
 
-	int delay = 16;
+	uint32_t delay = 16;
 
 	if (argc > 1)
 	{
@@ -183,10 +183,12 @@ main(int argc, char **argv)
 
 	struct boid *boids = (struct boid *)malloc(
 		boid_count * sizeof(struct boid));
-	for (int i = 0; i < boid_count; i++)
+	for (size_t i = 0; i < boid_count; i++)
 	{
-		SDL_FRect body = (SDL_FRect) { get_rand_pos(window_width),
-			get_rand_pos(window_height), boid_size, boid_size };
+		SDL_FRect body = (SDL_FRect) { .x = get_rand_pos(window_width),
+			.y			  = get_rand_pos(window_height),
+			.w			  = boid_size,
+			.h			  = boid_size };
 		boids[i]       = (struct boid) { .body = body,
 			      .vx		       = get_rand_vel(),
 			      .vy		       = get_rand_vel(),
@@ -217,7 +219,7 @@ main(int argc, char **argv)
 		SDL_RenderClear(renderer);
 
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
-		for (int i = 0; i < boid_count; i++)
+		for (size_t i = 0; i < boid_count; i++)
 		{
 			SDL_RenderFillRect(renderer, &boids[i].body);
 		}

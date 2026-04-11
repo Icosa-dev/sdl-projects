@@ -32,7 +32,7 @@ struct boid
  * @param window_width The width of the window displaying the boids
  * @param window_height The hight of the window displaying the boids
  */
-void steer_boids(struct boid *boids, int boids_count, int window_width,
-	int window_height);
+void steer_boids(struct boid *boids, size_t boids_count, uint32_t window_width,
+	uint32_t window_height);
 
 #endif

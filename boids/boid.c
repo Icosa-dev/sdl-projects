@@ -19,13 +19,13 @@ dist_to_boid(const struct boid *boid1, const struct boid *boid2)
 }
 
 static void
-calculate_separation(struct boid *boid, int idx, const struct boid *boids,
-	int boids_count)
+calculate_separation(struct boid *boid, size_t idx, const struct boid *boids,
+	size_t boids_count)
 {
 	float close_dx = 0;
 	float close_dy = 0;
 
-	for (int i = 0; i < boids_count; i++)
+	for (size_t i = 0; i < boids_count; i++)
 	{
 		if (i == idx)
 			continue;
@@ -44,14 +44,14 @@ calculate_separation(struct boid *boid, int idx, const struct boid *boids,
 }
 
 static void
-calculate_alignment(struct boid *boid, int idx, const struct boid *boids,
-	int boids_count)
+calculate_alignment(struct boid *boid, size_t idx, const struct boid *boids,
+	size_t boids_count)
 {
 	float xvel_avg		= 0;
 	float yvel_avg		= 0;
 	int   neighboring_boids = 0;
 
-	for (int i = 0; i < boids_count; i++)
+	for (size_t i = 0; i < boids_count; i++)
 	{
 		if (i == idx)
 			continue;
@@ -77,14 +77,14 @@ calculate_alignment(struct boid *boid, int idx, const struct boid *boids,
 }
 
 static void
-calculate_cohesion(struct boid *boid, int idx, const struct boid *boids,
-	int boids_count)
+calculate_cohesion(struct boid *boid, size_t idx, const struct boid *boids,
+	size_t boids_count)
 {
-	float xpos_avg		= 0;
-	float ypos_avg		= 0;
-	int   neighboring_boids = 0;
+	float  xpos_avg		 = 0;
+	float  ypos_avg		 = 0;
+	size_t neighboring_boids = 0;
 
-	for (int i = 0; i < boids_count; i++)
+	for (size_t i = 0; i < boids_count; i++)
 	{
 		if (i == idx)
 			continue;
@@ -110,7 +110,8 @@ calculate_cohesion(struct boid *boid, int idx, const struct boid *boids,
 }
 
 static void
-calculate_edge_avoidance(struct boid *boid, int window_width, int window_height)
+calculate_edge_avoidance(struct boid *boid, uint32_t window_width,
+	uint32_t window_height)
 {
 	float left_margin   = boid->edge_margin;
 	float right_margin  = window_width - boid->edge_margin;
@@ -131,10 +132,10 @@ calculate_edge_avoidance(struct boid *boid, int window_width, int window_height)
 }
 
 void
-steer_boids(struct boid *boids, int boids_count, int window_width,
-	int window_height)
+steer_boids(struct boid *boids, size_t boids_count, uint32_t window_width,
+	uint32_t window_height)
 {
-	for (int i = 0; i < boids_count; i++)
+	for (uint32_t i = 0; i < boids_count; i++)
 	{
 		struct boid *boid = &boids[i];
 		calculate_alignment(boid, i, boids, boids_count);
