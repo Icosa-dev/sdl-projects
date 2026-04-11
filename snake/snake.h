@@ -28,7 +28,7 @@ struct snake
 {
 	struct snake_node *head;
 	struct snake_node *tail;
-	int		   size;
+	size_t		   size;
 	enum direction	   direction;
 };
 
@@ -61,7 +61,7 @@ extern void snake_pop_back(struct snake *snake);
  * @param index The index of the segment relative to the head
  * @return SDL_FRect* Pointer to the segment of the snake body
  */
-extern SDL_FRect *snake_get_segment(const struct snake *snake, int index);
+extern SDL_FRect *snake_get_segment(const struct snake *snake, size_t index);
 
 /**
  * @brief Free all snake nodes and set values of the snake members to NULL or 0

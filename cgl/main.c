@@ -104,7 +104,7 @@ free_grid(bool **grid, int rows)
  * @return int The number of alive neighbors relative to point [r][c]
  */
 static int
-count_neighbors(bool **grid, int rows, int columns, int r, int c)
+count_neighbors(bool **grid, size_t rows, size_t columns, size_t r, size_t c)
 {
 	int count = 0;
 
@@ -115,10 +115,10 @@ count_neighbors(bool **grid, int rows, int columns, int r, int c)
 			if (i == 0 && j == 0)
 				continue;
 
-			int row = r + i;
-			int col = c + j;
+			size_t row = r + i;
+			size_t col = c + j;
 
-			if (row >= 0 && row < rows && col >= 0 && col < columns)
+			if (row < rows && col < columns)
 			{
 				if (grid[row][col] == ALIVE)
 					count++;
@@ -137,13 +137,13 @@ count_neighbors(bool **grid, int rows, int columns, int r, int c)
  * @param columns The amount of columns in the grid
  */
 static void
-update_grid(bool **grid, int rows, int columns)
+update_grid(bool **grid, size_t rows, size_t columns)
 {
 	bool **tmp = alloc_grid(rows, columns);
 
-	for (int r = 0; r < rows; r++)
+	for (size_t r = 0; r < rows; r++)
 	{
-		for (int c = 0; c < columns; c++)
+		for (size_t c = 0; c < columns; c++)
 		{
 			int  count = count_neighbors(grid, rows, columns, r, c);
 			bool current_cell = grid[r][c];
@@ -177,9 +177,9 @@ update_grid(bool **grid, int rows, int columns)
 		}
 	}
 
-	for (int r = 0; r < rows; r++)
+	for (size_t r = 0; r < rows; r++)
 	{
-		for (int c = 0; c < columns; c++)
+		for (size_t c = 0; c < columns; c++)
 		{
 			grid[r][c] = tmp[r][c];
 		}
@@ -196,13 +196,13 @@ update_grid(bool **grid, int rows, int columns)
  * @param columns The amount of columns in the grid
  */
 static void
-generate_random_grid(bool **grid, int rows, int columns)
+generate_random_grid(bool **grid, size_t rows, size_t columns)
 {
 	srand(time(NULL));
 
-	for (int r = 0; r < rows; r++)
+	for (size_t r = 0; r < rows; r++)
 	{
-		for (int c = 0; c < columns; c++)
+		for (size_t c = 0; c < columns; c++)
 		{
 			grid[r][c] = rand() % 2;
 		}
@@ -212,11 +212,11 @@ generate_random_grid(bool **grid, int rows, int columns)
 int
 main(int argc, char **argv)
 {
-	int cell_size = 5;
-	int rows      = 200;
-	int columns   = 200;
+	uint32_t cell_size = 5;
+	size_t	 rows	   = 200;
+	size_t	 columns   = 200;
 
-	int delay = 25;
+	uint32_t delay = 25;
 
 	if (argc > 1)
 	{
@@ -273,9 +273,9 @@ main(int argc, char **argv)
 		SDL_RenderClear(renderer);
 
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
-		for (int r = 0; r < rows; r++)
+		for (size_t r = 0; r < rows; r++)
 		{
-			for (int c = 0; c < columns; c++)
+			for (size_t c = 0; c < columns; c++)
 			{
 				float x = c * cell_size;
 				float y = r * cell_size;

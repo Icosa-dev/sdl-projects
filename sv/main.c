@@ -69,14 +69,14 @@ print_help(void)
  * @param array_size The size of the array
  */
 static void
-generate_random_array(int arr[], int array_size)
+generate_random_array(int arr[], size_t array_size)
 {
 	srand(time(NULL));
 
-	for (int i = 0; i < array_size; i++)
+	for (size_t i = 0; i < array_size; i++)
 		arr[i] = i + 1;
 
-	for (int i = array_size - 1; i > 0; i--)
+	for (size_t i = array_size - 1; i > 0; i--)
 	{
 		int j	 = rand() % (i + 1);
 		int temp = arr[i];
@@ -162,30 +162,27 @@ main(int argc, char **argv)
 			{
 			case BUBBLE:
 				bubble_sort(renderer, array, array_size,
-					column_width, window_width,
-					window_height, delay);
+					column_width, window_height, delay);
 				break;
 			case SELECTION:
 				selection_sort(renderer, array, array_size,
-					column_width, window_width,
-					window_height, delay);
+					column_width, window_height, delay);
 				break;
 			case INSERTION:
 				insertion_sort(renderer, array, array_size,
-					column_width, window_width,
-					window_height, delay);
+					column_width, window_height, delay);
 				break;
 			case QUICK:
 				quicksort(renderer, array, array_size, 0,
-					array_size, column_width, window_width,
-					window_height, delay);
+					array_size, column_width, window_height,
+					delay);
 				break;
 			}
 			sorted = true;
 		}
 
 		display_array(renderer, array, array_size, column_width,
-			window_height, window_height, delay, sorted);
+			window_height, delay, sorted);
 	}
 
 	free(array);

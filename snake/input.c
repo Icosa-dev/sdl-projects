@@ -96,8 +96,8 @@ get_longest_direction(const struct snake *snake, int cell_size,
  * Truely the future of software!
  */
 void
-get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running,
-	int cell_size, int window_width, int window_height)
+get_cpu_input(struct snake *snake, bool *running, int cell_size,
+	int window_width, int window_height)
 {
 	/* Check if user quit */
 	SDL_Event event;
@@ -107,7 +107,6 @@ get_cpu_input(struct snake *snake, const SDL_FRect *apple, bool *running,
 			*running = false;
 	}
 
-	SDL_FRect *current_head = snake_get_segment(snake, 0);
 	snake->direction = get_longest_direction(snake, cell_size, window_width,
 		window_height);
 }

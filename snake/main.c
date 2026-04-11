@@ -100,7 +100,7 @@ get_rand_pos(SDL_FRect *rect, struct snake *snake, int cell_size, int rows,
 		rect->x = (float)(SDL_rand(columns) * cell_size);
 		rect->y = (float)(SDL_rand(rows) * cell_size);
 
-		for (int i = 0; i < snake->size; i++)
+		for (size_t i = 0; i < snake->size; i++)
 		{
 			SDL_FRect *seg = snake_get_segment(snake, i);
 
@@ -129,6 +129,7 @@ main(int argc, char **argv)
 	/* Argument parsing */
 	if (argc > 1)
 	{
+		/* i is int not size_t to match argc */
 		for (int i = 1; i < argc; i++)
 		{
 			const char *arg = argv[i];
@@ -169,7 +170,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	int snake_max_size = rows * columns;
+	size_t snake_max_size = rows * columns;
 
 	int window_width  = columns * cell_size;
 	int window_height = rows * cell_size;
@@ -190,14 +191,13 @@ main(int argc, char **argv)
 	SDL_FRect apple = (SDL_FRect) { 0, 0, cell_size, cell_size };
 	get_rand_pos(&apple, snake, cell_size, rows, columns);
 
-	bool	  running = true;
-	SDL_Event event;
+	bool running = true;
 	while (running)
 	{
 		/* Input handling */
 		if (cpu_enabled)
-			get_cpu_input(snake, &apple, &running, cell_size,
-				window_height, window_width);
+			get_cpu_input(snake, &running, cell_size, window_height,
+				window_width);
 		else
 			get_user_input(snake, &keybinds, &running);
 
@@ -239,7 +239,7 @@ main(int argc, char **argv)
 				snake); /* remove back segment if not growing */
 
 		/* Snake-snake collision detection */
-		for (int i = 1; i < snake->size; i++)
+		for (size_t i = 1; i < snake->size; i++)
 		{
 			SDL_FRect *segment = snake_get_segment(snake, i);
 			if (new_head.x == segment->x &&
@@ -260,7 +260,7 @@ main(int argc, char **argv)
 
 		/* Render snake */
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
-		for (int i = 0; i < snake->size; i++)
+		for (size_t i = 0; i < snake->size; i++)
 		{
 			SDL_RenderFillRect(renderer,
 				snake_get_segment(snake, i));

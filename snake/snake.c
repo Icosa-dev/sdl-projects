@@ -65,13 +65,13 @@ snake_pop_back(struct snake *snake)
 }
 
 SDL_FRect *
-snake_get_segment(const struct snake *snake, int index)
+snake_get_segment(const struct snake *snake, size_t index)
 {
-	if (index < 0 || index >= snake->size)
+	if (index >= snake->size)
 		return NULL;
 
 	struct snake_node *current = snake->head;
-	for (int i = 0; i < index; i++)
+	for (size_t i = 0; i < index; i++)
 		current = current->next;
 
 	return &current->rect;
