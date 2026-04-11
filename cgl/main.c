@@ -67,11 +67,11 @@ print_help(void)
  * @return A 2d array of booleans as a pointer-pointer
  */
 static bool **
-alloc_grid(int rows, int columns)
+alloc_grid(size_t rows, size_t columns)
 {
 	bool **grid = malloc(rows * sizeof(bool *));
 
-	for (int i = 0; i < rows; i++)
+	for (size_t i = 0; i < rows; i++)
 	{
 		grid[i] = calloc(columns, sizeof(bool));
 	}
@@ -86,9 +86,9 @@ alloc_grid(int rows, int columns)
  * @param rows The amount of rows in the grid
  */
 static void
-free_grid(bool **grid, int rows)
+free_grid(bool **grid, size_t rows)
 {
-	for (int i = 0; i < rows; i++)
+	for (size_t i = 0; i < rows; i++)
 		free(grid[i]);
 	free(grid);
 }
@@ -103,10 +103,10 @@ free_grid(bool **grid, int rows)
  * @param c The column of the point to check neighbors for
  * @return int The number of alive neighbors relative to point [r][c]
  */
-static int
+static uint32_t
 count_neighbors(bool **grid, size_t rows, size_t columns, size_t r, size_t c)
 {
-	int count = 0;
+	uint32_t count = 0;
 
 	for (int i = -1; i <= 1; i++)
 	{
@@ -145,8 +145,9 @@ update_grid(bool **grid, size_t rows, size_t columns)
 	{
 		for (size_t c = 0; c < columns; c++)
 		{
-			int  count = count_neighbors(grid, rows, columns, r, c);
-			bool current_cell = grid[r][c];
+			uint32_t count = count_neighbors(grid, rows, columns, r,
+				c);
+			bool	 current_cell = grid[r][c];
 
 			/*
 			 * RULES:
@@ -245,8 +246,8 @@ main(int argc, char **argv)
 		}
 	}
 
-	int window_width  = rows * cell_size;
-	int window_height = columns * cell_size;
+	uint32_t window_width  = rows * cell_size;
+	uint32_t window_height = columns * cell_size;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -283,8 +284,10 @@ main(int argc, char **argv)
 				if (grid[r][c] == ALIVE)
 				{
 					SDL_RenderFillRect(renderer,
-						&(SDL_FRect) { x, y, cell_size,
-							cell_size });
+						&(SDL_FRect) { .x = x,
+							.y	  = y,
+							.w	  = cell_size,
+							.h = cell_size });
 				}
 			}
 		}

@@ -104,7 +104,7 @@ int
 main(int argc, char **argv)
 {
 	const uint32_t column_width = 5;
-	const size_t array_size   = 201;
+	const size_t   array_size   = 201;
 
 	uint32_t delay = 25;
 
@@ -138,7 +138,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	const uint32_t window_width	= array_size * column_width;
+	const uint32_t window_width  = array_size * column_width;
 	const uint32_t window_height = window_width;
 
 	SDL_Init(SDL_INIT_VIDEO);

@@ -47,7 +47,7 @@ extern void get_user_input(struct snake *snake, const struct keybinds *keybinds,
  * @param window_width
  * @param window_height
  */
-extern void get_cpu_input(struct snake *snake, bool *running, uint32_t cell_size,
-	uint32_t window_width, uint32_t window_height);
+extern void get_cpu_input(struct snake *snake, bool *running,
+	uint32_t cell_size, uint32_t window_width, uint32_t window_height);
 
 #endif

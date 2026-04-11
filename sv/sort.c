@@ -13,7 +13,8 @@
 /* Display the array as a bar graph on the screen */
 void
 display_array(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
-	uint32_t column_width, uint32_t window_height, uint32_t delay, bool sorted)
+	uint32_t column_width, uint32_t window_height, uint32_t delay,
+	bool sorted)
 {
 	SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(BLACK));
 	SDL_RenderClear(renderer);
@@ -86,7 +87,7 @@ selection_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
 				min_idx = j;
 			}
 		}
-		uint32_t temp       = array[min_idx];
+		uint32_t temp  = array[min_idx];
 		array[min_idx] = array[i];
 		array[i]       = temp;
 
@@ -101,8 +102,8 @@ insertion_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
 {
 	for (size_t i = 1; i < array_size; i++)
 	{
-		int    key = array[i];
-		size_t j   = i - 1;
+		uint32_t key = array[i];
+		size_t	 j   = i - 1;
 
 		while (array[j] > key)
 		{
@@ -122,11 +123,12 @@ insertion_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
 }
 
 static size_t
-partition(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t low,
-	size_t high, uint32_t column_width, uint32_t window_height, uint32_t delay)
+partition(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	size_t low, size_t high, uint32_t column_width, uint32_t window_height,
+	uint32_t delay)
 {
 	size_t pivot = array[high];
-	size_t i	  = (low - 1);
+	size_t i     = (low - 1);
 
 	for (size_t j = low; j <= high - 1; j++)
 	{
@@ -143,9 +145,9 @@ partition(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t lo
 				window_height, delay, false);
 		}
 	}
-	uint32_t temp     = array[i + 1];
-	array[i + 1] = array[high];
-	array[high]  = temp;
+	uint32_t temp = array[i + 1];
+	array[i + 1]  = array[high];
+	array[high]   = temp;
 
 	display_array(renderer, array, array_size, column_width, window_height,
 		delay, false);
@@ -153,8 +155,9 @@ partition(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t lo
 }
 
 void
-quicksort(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t low,
-	size_t high, uint32_t cell_size, uint32_t window_height, uint32_t delay)
+quicksort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	size_t low, size_t high, uint32_t cell_size, uint32_t window_height,
+	uint32_t delay)
 {
 	if (low < high)
 	{

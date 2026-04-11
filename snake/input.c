@@ -53,11 +53,10 @@ static enum direction
 get_longest_direction(const struct snake *snake, uint32_t cell_size,
 	uint32_t window_width, uint32_t window_height)
 {
-	uint32_t ix	   = (snake->head->rect.x / cell_size);
-	uint32_t iy	   = (snake->head->rect.y / cell_size);
+	uint32_t ix	= (snake->head->rect.x / cell_size);
+	uint32_t iy	= (snake->head->rect.y / cell_size);
 	uint32_t grid_w = (window_width / cell_size);
 	uint32_t grid_h = (window_height / cell_size);
-
 
 	if (ix == 0 && iy > 0)
 	{

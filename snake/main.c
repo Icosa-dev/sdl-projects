@@ -89,8 +89,8 @@ freeze_screen(void)
  * @param max_y The max y value
  */
 static void
-get_rand_pos(SDL_FRect *rect, struct snake *snake, uint32_t cell_size, size_t rows,
-	size_t columns)
+get_rand_pos(SDL_FRect *rect, struct snake *snake, uint32_t cell_size,
+	size_t rows, size_t columns)
 {
 	bool overlapping;
 	do
@@ -118,13 +118,13 @@ main(int argc, char **argv)
 {
 	/* Default game values */
 	uint32_t cell_size = 25;
-	size_t rows      = 20;
-	size_t columns   = 20;
+	size_t	 rows	   = 20;
+	size_t	 columns   = 20;
 
 	struct keybinds keybinds = WASD;
 
-	bool cpu_enabled = false;
-	uint32_t delay	 = 50;
+	bool	 cpu_enabled = false;
+	uint32_t delay	     = 50;
 
 	/* Argument parsing */
 	if (argc > 1)
