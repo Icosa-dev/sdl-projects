@@ -69,7 +69,7 @@ print_help(void)
  * @param array_size The size of the array
  */
 static void
-generate_random_array(int arr[], size_t array_size)
+generate_random_array(uint32_t arr[], size_t array_size)
 {
 	srand(time(NULL));
 
@@ -103,10 +103,10 @@ check_event(void)
 int
 main(int argc, char **argv)
 {
-	const int column_width = 5;
-	const int array_size   = 201;
+	const uint32_t column_width = 5;
+	const size_t array_size   = 201;
 
-	int delay = 25;
+	uint32_t delay = 25;
 
 	enum algorithm algorithm = BUBBLE;
 
@@ -138,8 +138,8 @@ main(int argc, char **argv)
 		}
 	}
 
-	const int window_width	= array_size * column_width;
-	const int window_height = window_width;
+	const uint32_t window_width	= array_size * column_width;
+	const uint32_t window_height = window_width;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -147,7 +147,7 @@ main(int argc, char **argv)
 		    window_height, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
 
-	int *array = (int *)malloc(array_size * sizeof(int));
+	uint32_t *array = (uint32_t *)malloc(array_size * sizeof(int));
 	generate_random_array(array, array_size);
 
 	bool running = true;

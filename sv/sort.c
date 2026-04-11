@@ -12,8 +12,8 @@
 
 /* Display the array as a bar graph on the screen */
 void
-display_array(SDL_Renderer *renderer, int array[], size_t array_size,
-	int column_width, int window_height, int delay, bool sorted)
+display_array(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	uint32_t column_width, uint32_t window_height, uint32_t delay, bool sorted)
 {
 	SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(BLACK));
 	SDL_RenderClear(renderer);
@@ -24,10 +24,10 @@ display_array(SDL_Renderer *renderer, int array[], size_t array_size,
 		SDL_SetRenderDrawColor(renderer, COLOR_TO_ARGS(WHITE));
 	for (size_t i = 0; i < array_size; i++)
 	{
-		SDL_FRect rect = { (float)i * column_width,
-			(float)window_height - (array[i] * column_width),
-			(float)column_width - 1,
-			(float)array[i] * column_width };
+		SDL_FRect rect = { .x = (float)i * column_width,
+			.y = (float)window_height - (array[i] * column_width),
+			.w = (float)column_width - 1,
+			.h = (float)array[i] * column_width };
 		SDL_RenderFillRect(renderer, &rect);
 	}
 
@@ -37,7 +37,7 @@ display_array(SDL_Renderer *renderer, int array[], size_t array_size,
 
 /* Check if the user quit */
 static void
-check_event()
+check_event(void)
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -49,8 +49,8 @@ check_event()
 }
 
 void
-bubble_sort(SDL_Renderer *renderer, int array[], size_t array_size,
-	int column_width, int window_height, int delay)
+bubble_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	uint32_t column_width, uint32_t window_height, uint32_t delay)
 {
 	for (size_t i = 0; i < array_size; i++)
 	{
@@ -72,8 +72,8 @@ bubble_sort(SDL_Renderer *renderer, int array[], size_t array_size,
 }
 
 void
-selection_sort(SDL_Renderer *renderer, int array[], size_t array_size,
-	int column_width, int window_height, int delay)
+selection_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	uint32_t column_width, uint32_t window_height, uint32_t delay)
 {
 	for (size_t i = 0; i < array_size - 1; i++)
 	{
@@ -86,7 +86,7 @@ selection_sort(SDL_Renderer *renderer, int array[], size_t array_size,
 				min_idx = j;
 			}
 		}
-		int temp       = array[min_idx];
+		uint32_t temp       = array[min_idx];
 		array[min_idx] = array[i];
 		array[i]       = temp;
 
@@ -96,8 +96,8 @@ selection_sort(SDL_Renderer *renderer, int array[], size_t array_size,
 }
 
 void
-insertion_sort(SDL_Renderer *renderer, int array[], size_t array_size,
-	int column_width, int window_height, int delay)
+insertion_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	uint32_t column_width, uint32_t window_height, uint32_t delay)
 {
 	for (size_t i = 1; i < array_size; i++)
 	{
@@ -121,12 +121,12 @@ insertion_sort(SDL_Renderer *renderer, int array[], size_t array_size,
 	}
 }
 
-static int
-partition(SDL_Renderer *renderer, int array[], size_t array_size, size_t low,
-	size_t high, int column_width, int window_height, int delay)
+static size_t
+partition(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t low,
+	size_t high, uint32_t column_width, uint32_t window_height, uint32_t delay)
 {
-	int pivot = array[high];
-	int i	  = (low - 1);
+	size_t pivot = array[high];
+	size_t i	  = (low - 1);
 
 	for (size_t j = low; j <= high - 1; j++)
 	{
@@ -143,7 +143,7 @@ partition(SDL_Renderer *renderer, int array[], size_t array_size, size_t low,
 				window_height, delay, false);
 		}
 	}
-	int temp     = array[i + 1];
+	uint32_t temp     = array[i + 1];
 	array[i + 1] = array[high];
 	array[high]  = temp;
 
@@ -153,12 +153,12 @@ partition(SDL_Renderer *renderer, int array[], size_t array_size, size_t low,
 }
 
 void
-quicksort(SDL_Renderer *renderer, int array[], size_t array_size, size_t low,
-	size_t high, int cell_size, int window_height, int delay)
+quicksort(SDL_Renderer *renderer, uint32_t array[], size_t array_size, size_t low,
+	size_t high, uint32_t cell_size, uint32_t window_height, uint32_t delay)
 {
 	if (low < high)
 	{
-		int pi = partition(renderer, array, array_size, low, high,
+		size_t pi = partition(renderer, array, array_size, low, high,
 			cell_size, window_height, delay);
 		quicksort(renderer, array, array_size, low, pi - 1, cell_size,
 			window_height, delay);

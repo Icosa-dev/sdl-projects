@@ -21,8 +21,8 @@ typedef struct SDL_Renderer SDL_Renderer;
  * @param delay How many milliseconds to delay after displaying
  * @param sorted If true renderer bars as green, else white
  */
-extern void display_array(SDL_Renderer *renderer, int array[],
-	size_t array_size, int column_width, int window_height, int delay,
+extern void display_array(SDL_Renderer *renderer, uint32_t array[],
+	size_t array_size, uint32_t column_width, uint32_t window_height, uint32_t delay,
 	bool sorted);
 
 /**
@@ -35,8 +35,8 @@ extern void display_array(SDL_Renderer *renderer, int array[],
  * @param window_height The height of the window to display to
  * @param delay How many milliseconds to delay after displaying
  */
-extern void bubble_sort(SDL_Renderer *renderer, int array[], size_t array_size,
-	int column_width, int window_height, int delay);
+extern void bubble_sort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	uint32_t column_width, uint32_t window_height, uint32_t delay);
 
 /**
  * @brief Sort and display an array using the selection sort algorithm
@@ -48,8 +48,8 @@ extern void bubble_sort(SDL_Renderer *renderer, int array[], size_t array_size,
  * @param window_height The height of the window to display to
  * @param delay How many milliseconds to delay after displaying
  */
-extern void selection_sort(SDL_Renderer *renderer, int array[],
-	size_t array_size, int column_width, int window_height, int delay);
+extern void selection_sort(SDL_Renderer *renderer, uint32_t array[],
+	size_t array_size, uint32_t column_width, uint32_t window_height, uint32_t delay);
 
 /**
  * @brief Sort and display an array using the insertion sort algorithm
@@ -61,8 +61,8 @@ extern void selection_sort(SDL_Renderer *renderer, int array[],
  * @param window_height The height of the window to display to
  * @param delay How many milliseconds to delay after displaying
  */
-extern void insertion_sort(SDL_Renderer *renderer, int array[],
-	size_t array_size, int column_width, int window_height, int delay);
+extern void insertion_sort(SDL_Renderer *renderer, uint32_t array[],
+	size_t array_size, uint32_t column_width, uint32_t window_height, uint32_t delay);
 
 /**
  * @brief Sort and display an array using the quicksort algorithm
@@ -74,9 +74,9 @@ extern void insertion_sort(SDL_Renderer *renderer, int array[],
  * @param window_height The height of the window to display to
  * @param delay How many milliseconds to delay after displaying
  */
-extern void quicksort(SDL_Renderer *renderer, int array[], size_t array_size,
-	size_t low, size_t high, int column_width, int window_height,
-	int delay);
+extern void quicksort(SDL_Renderer *renderer, uint32_t array[], size_t array_size,
+	size_t low, size_t high, uint32_t column_width, uint32_t window_height,
+	uint32_t delay);
 
 enum algorithm
 {
