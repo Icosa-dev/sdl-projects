@@ -20,26 +20,22 @@
 
 #define STREQ(str1, str2) (strcmp(str1, str2) == 0)
 
-static void
-print_version(void)
-{
-	printf("%s: %s (%s)\n", PROGRAM_NAME, DESCRIPTION, VERSION);
-	exit(0);
+static void print_version(void) {
+    printf("%s: %s (%s)\n", PROGRAM_NAME, DESCRIPTION, VERSION);
+    exit(0);
 }
 
-static void
-print_help(void)
-{
-	printf("Usage: sv [OPTIONS]\n");
-	printf("Options:\n");
-	printf("\t-h, --help\t\t\tPrint this help message and exit\n");
-	printf("\t-v, --version\t\t\tPrint the version message and exit\n");
-	printf("\t--delay\t\t\t\tSet the delay of the program in milliseconds\n");
-	printf("\t--bubble\t\t\tSort using the bubble sort algorithm\n");
-	printf("\t--selection\t\t\tSort using the selection sort algorithm\n");
-	printf("\t--insertion\t\t\tSort using the insertion sort algorithm\n");
-	printf("\t--quick\t\t\t\tSort using the quicksort algorithm\n");
-	exit(0);
+static void print_help(void) {
+    printf("Usage: sv [OPTIONS]\n");
+    printf("Options:\n");
+    printf("\t-h, --help\t\t\tPrint this help message and exit\n");
+    printf("\t-v, --version\t\t\tPrint the version message and exit\n");
+    printf("\t--delay\t\t\t\tSet the delay of the program in milliseconds\n");
+    printf("\t--bubble\t\t\tSort using the bubble sort algorithm\n");
+    printf("\t--selection\t\t\tSort using the selection sort algorithm\n");
+    printf("\t--insertion\t\t\tSort using the insertion sort algorithm\n");
+    printf("\t--quick\t\t\t\tSort using the quicksort algorithm\n");
+    exit(0);
 }
 
 /**
@@ -50,127 +46,112 @@ print_help(void)
  * @param arr The array to randomize
  * @param array_size The size of the array
  */
-static void
-generate_random_array(uint32_t arr[], size_t array_size)
-{
-	srand(time(NULL));
+static void generate_random_array(uint32_t arr[], size_t array_size) {
+    srand(time(NULL));
 
-	for (size_t i = 0; i < array_size; i++)
-		arr[i] = i + 1;
+    for (size_t i = 0; i < array_size; i++)
+        arr[i] = i + 1;
 
-	for (size_t i = array_size - 1; i > 0; i--)
-	{
-		int j	 = rand() % (i + 1);
-		int temp = arr[i];
-		arr[i]	 = arr[j];
-		arr[j]	 = temp;
-	}
+    for (size_t i = array_size - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 }
 
 /**
  * @brief Check if the user quit the program
  */
-static void
-check_event(void)
-{
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-		if (event.type == SDL_EVENT_QUIT)
-		{
-			SDL_Quit();
-			exit(0);
-		}
+static void check_event(void) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+        if (event.type == SDL_EVENT_QUIT) {
+            SDL_Quit();
+            exit(0);
+        }
 }
 
-int
-main(int argc, char **argv)
-{
-	const uint32_t column_width = 5;
-	const size_t   array_size   = 201;
+int main(int argc, char **argv) {
+    const uint32_t column_width = 5;
+    const size_t array_size = 201;
 
-	uint32_t delay = 25;
+    uint32_t delay = 25;
 
-	enum algorithm algorithm = BUBBLE;
+    enum algorithm algorithm = BUBBLE;
 
-	if (argc > 1)
-	{
-		for (int i = 0; i < argc; i++)
-		{
-			const char *arg = argv[i];
+    if (argc > 1) {
+        for (int i = 0; i < argc; i++) {
+            const char *arg = argv[i];
 
-			if (STREQ(arg, "-h") || STREQ(arg, "--help"))
-				print_help();
-			else if (STREQ(arg, "-v") || STREQ(arg, "--version"))
-				print_version();
-			else if (STREQ(arg, "--bubble"))
-				algorithm = BUBBLE;
-			else if (STREQ(arg, "--selection"))
-				algorithm = SELECTION;
-			else if (STREQ(arg, "--insertion"))
-				algorithm = INSERTION;
-			else if (STREQ(arg, "--quick"))
-				algorithm = QUICK;
+            if (STREQ(arg, "-h") || STREQ(arg, "--help"))
+                print_help();
+            else if (STREQ(arg, "-v") || STREQ(arg, "--version"))
+                print_version();
+            else if (STREQ(arg, "--bubble"))
+                algorithm = BUBBLE;
+            else if (STREQ(arg, "--selection"))
+                algorithm = SELECTION;
+            else if (STREQ(arg, "--insertion"))
+                algorithm = INSERTION;
+            else if (STREQ(arg, "--quick"))
+                algorithm = QUICK;
 
-			if (i + 1 < argc)
-			{
-				const char *value = argv[i + 1];
-				if (STREQ(arg, "--delay"))
-					delay = atoi(value);
-			}
-		}
-	}
+            if (i + 1 < argc) {
+                const char *value = argv[i + 1];
+                if (STREQ(arg, "--delay"))
+                    delay = atoi(value);
+            }
+        }
+    }
 
-	const uint32_t window_width  = array_size * column_width;
-	const uint32_t window_height = window_width;
+    const uint32_t window_width = array_size * column_width;
+    const uint32_t window_height = window_width;
 
-	SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window   *window   = SDL_CreateWindow(PROGRAM_NAME, window_width,
-		    window_height, 0);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
+    SDL_Window *window =
+        SDL_CreateWindow(PROGRAM_NAME, window_width, window_height, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
 
-	uint32_t *array = (uint32_t *)malloc(array_size * sizeof(int));
-	generate_random_array(array, array_size);
+    uint32_t *array = (uint32_t *)malloc(array_size * sizeof(int));
+    generate_random_array(array, array_size);
 
-	bool running = true;
-	bool sorted  = false;
-	while (running)
-	{
-		check_event();
+    bool running = true;
+    bool sorted = false;
+    while (running) {
+        check_event();
 
-		if (!sorted)
-		{
-			switch (algorithm)
-			{
-			case BUBBLE:
-				bubble_sort(renderer, array, array_size,
-					column_width, window_height, delay);
-				break;
-			case SELECTION:
-				selection_sort(renderer, array, array_size,
-					column_width, window_height, delay);
-				break;
-			case INSERTION:
-				insertion_sort(renderer, array, array_size,
-					column_width, window_height, delay);
-				break;
-			case QUICK:
-				quicksort(renderer, array, array_size, 0,
-					array_size, column_width, window_height,
-					delay);
-				break;
-			}
-			sorted = true;
-		}
+        if (!sorted) {
+            switch (algorithm) {
+            case BUBBLE:
+                bubble_sort(renderer, array, array_size, column_width,
+                            window_height, delay);
+                break;
+            case SELECTION:
+                selection_sort(renderer, array, array_size, column_width,
+                               window_height, delay);
+                break;
+            case INSERTION:
+                insertion_sort(renderer, array, array_size, column_width,
+                               window_height, delay);
+                break;
+            case QUICK:
+                quicksort(renderer, array, array_size, 0, array_size,
+                          column_width, window_height, delay);
+                break;
+            }
+            sorted = true;
+        }
 
-		display_array(renderer, array, array_size, column_width,
-			window_height, delay, sorted);
-	}
+        display_array(renderer, array, array_size, column_width, window_height,
+                      delay, sorted);
+    }
 
-	free(array);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+    free(array);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
-	return 0;
+    return 0;
 }

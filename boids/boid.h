@@ -9,19 +9,18 @@
 
 #include <SDL3/SDL_rect.h>
 
-struct boid
-{
-	SDL_FRect body;
-	float	  vx, vy;
-	float	  protected_range;
-	float	  visual_range;
-	float	  edge_margin;
-	float	  separation_factor;
-	float	  alignment_factor;
-	float	  cohesion_factor;
-	float	  edge_avoidance_factor;
-	float	  max_speed;
-	float	  min_speed;
+struct boid {
+    SDL_FRect body;
+    float vx, vy;
+    float protected_range;
+    float visual_range;
+    float edge_margin;
+    float separation_factor;
+    float alignment_factor;
+    float cohesion_factor;
+    float edge_avoidance_factor;
+    float max_speed;
+    float min_speed;
 };
 
 /**
@@ -33,6 +32,6 @@ struct boid
  * @param window_height The hight of the window displaying the boids
  */
 void steer_boids(struct boid *boids, size_t boids_count, uint32_t window_width,
-	uint32_t window_height);
+                 uint32_t window_height);
 
 #endif

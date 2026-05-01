@@ -9,27 +9,19 @@
 
 #include <SDL3/SDL_rect.h>
 
-enum direction
-{
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
+enum direction { UP, DOWN, LEFT, RIGHT };
+
+struct snake_node {
+    SDL_FRect rect;
+    struct snake_node *prev;
+    struct snake_node *next;
 };
 
-struct snake_node
-{
-	SDL_FRect	   rect;
-	struct snake_node *prev;
-	struct snake_node *next;
-};
-
-struct snake
-{
-	struct snake_node *head;
-	struct snake_node *tail;
-	size_t		   size;
-	enum direction	   direction;
+struct snake {
+    struct snake_node *head;
+    struct snake_node *tail;
+    size_t size;
+    enum direction direction;
 };
 
 /**

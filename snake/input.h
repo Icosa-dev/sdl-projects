@@ -9,21 +9,14 @@
 
 #include <SDL3/SDL.h>
 
-struct keybinds
-{
-	SDL_Keycode up, down, left, right;
+struct keybinds {
+    SDL_Keycode up, down, left, right;
 };
 
-#define WASD                                   \
-	(struct keybinds)                      \
-	{                                      \
-		SDLK_W, SDLK_S, SDLK_A, SDLK_D \
-	}
-#define ARROWS                                            \
-	(struct keybinds)                                 \
-	{                                                 \
-		SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT \
-	}
+#define WASD                                                                   \
+    (struct keybinds) { SDLK_W, SDLK_S, SDLK_A, SDLK_D }
+#define ARROWS                                                                 \
+    (struct keybinds) { SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT }
 
 struct snake;
 
@@ -35,7 +28,7 @@ struct snake;
  * @param running
  */
 extern void get_user_input(struct snake *snake, const struct keybinds *keybinds,
-	bool *running);
+                           bool *running);
 
 /**
  * @brief Get the cpu input object
@@ -48,6 +41,7 @@ extern void get_user_input(struct snake *snake, const struct keybinds *keybinds,
  * @param window_height
  */
 extern void get_cpu_input(struct snake *snake, bool *running,
-	uint32_t cell_size, uint32_t window_width, uint32_t window_height);
+                          uint32_t cell_size, uint32_t window_width,
+                          uint32_t window_height);
 
 #endif
