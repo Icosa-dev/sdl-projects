@@ -159,17 +159,17 @@ int main(int argc, char **argv) {
                                      .w = boidSize,
                                      .h = boidSize};
         boids[i] = (Boid){.body = body,
-                                 .vx = getRandVel(),
-                                 .vy = getRandVel(),
-                                 .protectedRange = protectedRange,
-                                 .visualRange = visualRange,
-                                 .edgeMargin = edgeMargin,
-                                 .separationFactor = separationFactor,
-                                 .alignmentFactor = alignmentFactor,
-                                 .cohesionFactor = cohesionFactor,
-                                 .edgeAvoidanceFactor = edgeAvoidanceFactor,
-                                 .maxSpeed = maxSpeed,
-                                 .minSpeed = minSpeed};
+                          .vx = getRandVel(),
+                          .vy = getRandVel(),
+                          .protectedRange = protectedRange,
+                          .visualRange = visualRange,
+                          .edgeMargin = edgeMargin,
+                          .separationFactor = separationFactor,
+                          .alignmentFactor = alignmentFactor,
+                          .cohesionFactor = cohesionFactor,
+                          .edgeAvoidanceFactor = edgeAvoidanceFactor,
+                          .maxSpeed = maxSpeed,
+                          .minSpeed = minSpeed};
     }
 
     bool running = true;

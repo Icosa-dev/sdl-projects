@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2026 LJC
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_render.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#include "sort.h"
+
+#define PROGRAM_NAME "sv"
+#define DESCRIPTION "A basic sorting algorithm visualizer implemented in SDL3"
+#define AUTHORS "LJC"
+#define VERSION "v0.1.0"
+
+#define STREQ(str1, str2) (strcmp(str1, str2) == 0)
+
+static void printVersion(void) {
+    printf("%s: %s (%s)\n", PROGRAM_NAME, DESCRIPTION, VERSION);
+    exit(0);
+}
+
+static void printHelp(void) {
+    printf("Usage: sv [OPTIONS]\n");
+    printf("Options:\n");
+    printf("\t-h, --help\t\t\tPrint this help message and exit\n");
+    printf("\t-v, --version\t\t\tPrint the version message and exit\n");
+    printf("\t--delay\t\t\t\tSet the delay of the program in milliseconds\n");
+    printf("\t--bubble\t\t\tSort using the bubble sort algorithm\n");
+    printf("\t--selection\t\t\tSort using the selection sort algorithm\n");
+    printf("\t--insertion\t\t\tSort using the insertion sort algorithm\n");
+    printf("\t--quick\t\t\t\tSort using the quicksort algorithm\n");
+    exit(0);
+}
+
+/**
+ * @brief Generate a random array of integers such that the smallest
+ * value in the array is 0 and the largest is the size of the array
+ * and that there are no repeated values.
+ *
+ * @param arr The array to randomize
+ * @param arraySize The size of the array
+ */
+static void generateRandomArray(int arr[], int arraySize) {
+    srand(time(NULL));
+
+    for (int i = 0; i < arraySize; i++)
+        arr[i] = i + 1;
+
+    for (int i = arraySize - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+
+/**
+ * @brief Check if the user quit the program
+ */
+static void checkEvent(void) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+        if (event.type == SDL_EVENT_QUIT) {
+            SDL_Quit();
+            exit(0);
+        }
+}
+
+int main(int argc, char **argv) {
+    const int column_width = 5;
+    const int array_size = 201;
+
+    int delay = 25;
+
+    Algorithm algorithm = BUBBLE;
+
+    if (argc > 1) {
+        for (int i = 0; i < argc; i++) {
+            const char *arg = argv[i];
+
+            if (STREQ(arg, "-h") || STREQ(arg, "--help"))
+                printHelp();
+            else if (STREQ(arg, "-v") || STREQ(arg, "--version"))
+                printVersion();
+            else if (STREQ(arg, "--bubble"))
+                algorithm = BUBBLE;
+            else if (STREQ(arg, "--selection"))
+                algorithm = SELECTION;
+            else if (STREQ(arg, "--insertion"))
+                algorithm = INSERTION;
+            else if (STREQ(arg, "--quick"))
+                algorithm = QUICK;
+
+            if (i + 1 < argc) {
+                const char *value = argv[i + 1];
+                if (STREQ(arg, "--delay"))
+                    delay = atoi(value);
+            }
+        }
+    }
+
+    const int window_width = array_size * column_width;
+    const int window_height = window_width;
+
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_Window *window =
+        SDL_CreateWindow(PROGRAM_NAME, window_width, window_height, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, 0);
+
+    int *array = (int *)malloc(array_size * sizeof(int));
+    generateRandomArray(array, array_size);
+
+    bool running = true;
+    bool sorted = false;
+    while (running) {
+        checkEvent();
+
+        if (!sorted) {
+            switch (algorithm) {
+            case BUBBLE:
+                bubbleSort(renderer, array, array_size, column_width,
+                           window_height, delay);
+                break;
+            case SELECTION:
+                selectionSort(renderer, array, array_size, column_width,
+                              window_height, delay);
+                break;
+            case INSERTION:
+                insertionSort(renderer, array, array_size, column_width,
+                              window_height, delay);
+                break;
+            case QUICK:
+                quicksort(renderer, array, array_size, 0, array_size,
+                          column_width, window_height, delay);
+                break;
+            }
+            sorted = true;
+        }
+
+        displayArray(renderer, array, array_size, column_width, window_height,
+                     delay, sorted);
+    }
+
+    free(array);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
+}

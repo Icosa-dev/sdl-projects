@@ -31,7 +31,6 @@ typedef struct {
  * @param windowWidth The width of the window displaying the boids
  * @param windowHeight The hight of the window displaying the boids
  */
-void steerBoids(Boid *boids, int boidsCount, int windowWidth,
-                 int windowHeight);
+void steerBoids(Boid *boids, int boidsCount, int windowWidth, int windowHeight);
 
 #endif

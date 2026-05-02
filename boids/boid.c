@@ -16,8 +16,8 @@ static float distToBoid(const Boid *boid1, const Boid *boid2) {
     return sqrtf(dx * dx + dy * dy);
 }
 
-static void calculateSeparation(Boid *boid, int idx,
-                                 const Boid *boids, int boidsCount) {
+static void calculateSeparation(Boid *boid, int idx, const Boid *boids,
+                                int boidsCount) {
     float closeDx = 0;
     float closeDy = 0;
 
@@ -37,8 +37,8 @@ static void calculateSeparation(Boid *boid, int idx,
     boid->vy += closeDy * boid->separationFactor;
 }
 
-static void calculate_alignment(Boid *boid, int idx,
-                                const Boid *boids, int boidsCount) {
+static void calculate_alignment(Boid *boid, int idx, const Boid *boids,
+                                int boidsCount) {
     float xvelAvg = 0;
     float yvelAvg = 0;
     int neighboringBoids = 0;
@@ -65,8 +65,8 @@ static void calculate_alignment(Boid *boid, int idx,
     }
 }
 
-static void calculateCohesion(Boid *boid, int idx,
-                               const Boid *boids, int boidsCount) {
+static void calculateCohesion(Boid *boid, int idx, const Boid *boids,
+                              int boidsCount) {
     float xposAvg = 0;
     float yposAvg = 0;
     int neighboringBoids = 0;
@@ -94,7 +94,7 @@ static void calculateCohesion(Boid *boid, int idx,
 }
 
 static void calculateEdgeAvoidance(Boid *boid, int window_width,
-                                     int window_height) {
+                                   int window_height) {
     float leftMargin = boid->edgeMargin;
     float rightMargin = window_width - boid->edgeMargin;
     float topMargin = boid->edgeMargin;
@@ -114,7 +114,7 @@ static void calculateEdgeAvoidance(Boid *boid, int window_width,
 }
 
 void steerBoids(Boid *boids, int boidsCount, int windowWidth,
-                 int windowHeight) {
+                int windowHeight) {
     for (int i = 0; i < boidsCount; i++) {
         Boid *boid = &boids[i];
         calculate_alignment(boid, i, boids, boidsCount);
